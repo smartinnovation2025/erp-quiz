@@ -186,47 +186,45 @@
 
   .start-view .btn{ width:100%; justify-content:center; margin-top:4px; font-size:16px; min-height:52px; padding:13px 24px; }
 
-  .card-head{ display:flex; align-items:center; gap:clamp(12px,3vw,18px); margin-bottom:16px; margin-top:6px; position:relative; }
-  .specimen-icon{
-    width:clamp(64px,16vw,88px); height:clamp(64px,16vw,88px); flex:0 0 auto; border-radius:50%;
+  .q-icon{
+    width:76px; height:76px; margin:2px auto 10px; border-radius:50%;
     background:var(--panel-soft);
-    display:flex;align-items:center;justify-content:center;
+    display:flex; align-items:center; justify-content:center;
     box-shadow:0 8px 18px -10px rgba(10,42,58,0.4);
     animation:iconPop .55s cubic-bezier(.3,1.4,.4,1) both;
     position:relative; z-index:1;
   }
-  .specimen-icon::before{
+  .q-icon::before{
     content:""; position:absolute; inset:-4px; border-radius:50%; z-index:-1;
     background:conic-gradient(from 0deg,var(--blue),var(--teal),var(--emerald),var(--gold),var(--blue));
     animation:ringSpin 7s linear infinite;
   }
-  .specimen-icon::after{
+  .q-icon::after{
     content:""; position:absolute; inset:-9px; border-radius:50%;
     border:2px solid var(--gold); opacity:0; animation:haloRing 1.8s ease-out infinite;
   }
-  @keyframes ringSpin{ to{ transform:rotate(360deg); } }
-  @keyframes haloRing{ 0%{ transform:scale(0.85); opacity:0.7;} 100%{ transform:scale(1.25); opacity:0;} }
-  @keyframes iconPop{ from{opacity:0; transform:scale(.5) rotate(-14deg);} to{opacity:1; transform:scale(1) rotate(0);} }
-  .specimen-icon svg{ width:clamp(38px,9vw,52px);height:clamp(38px,9vw,52px); }
-  .specimen-icon svg path, .specimen-icon svg circle, .specimen-icon svg ellipse{
+  .q-icon svg{ width:44px; height:44px; }
+  .q-icon svg path, .q-icon svg circle, .q-icon svg ellipse{
     stroke-dasharray:220; stroke-dashoffset:220; animation:draw 1s ease forwards .15s;
   }
+  @keyframes iconPop{ from{opacity:0; transform:scale(.5) rotate(-14deg);} to{opacity:1; transform:scale(1) rotate(0);} }
+  @keyframes ringSpin{ to{ transform:rotate(360deg); } }
+  @keyframes haloRing{ 0%{ transform:scale(0.85); opacity:0.7;} 100%{ transform:scale(1.25); opacity:0;} }
   @keyframes draw{ to{stroke-dashoffset:0;} }
 
-  .specimen-meta{ min-width:0; }
-  .specimen-meta .tag{ font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--teal-deep); font-weight:700; display:block; margin-bottom:3px; }
-  .specimen-meta h2{ font-family:'Noto Serif Thai',serif; font-size:clamp(19px,4.4vw,24px); margin:0; font-weight:700; color:var(--ink); }
+  .q-tag{ font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--teal-deep); font-weight:700; display:block; text-align:center; margin:0 0 8px; }
 
-  .question{ font-size:clamp(15px,3.6vw,17px); line-height:1.65; margin:14px 2px 18px; font-weight:500; color:var(--ink); animation:fadeUp .5s ease .1s both; }
+  .question{ font-family:'Noto Serif Thai',serif; font-size:clamp(19px,4.6vw,24px); line-height:1.5; margin:0 2px 20px; font-weight:700; color:var(--ink); text-align:center; animation:fadeUp .5s ease .1s both; }
   @keyframes fadeUp{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
 
-  .choices{ display:grid; gap:10px; grid-template-columns:1fr; }
+  .choices{ display:grid; gap:12px; grid-template-columns:1fr 1fr; }
   .choice{
-    text-align:left; background:var(--panel-soft); border:1.5px solid var(--panel-line);
-    border-radius:14px; padding:13px 16px; font-family:inherit; font-size:14.5px; color:var(--ink);
-    cursor:pointer; min-height:50px;
+    text-align:left; background:var(--panel-soft); border:2px solid var(--panel-line);
+    border-radius:16px; padding:16px; font-family:inherit; font-size:15.5px; font-weight:600; color:var(--ink);
+    cursor:pointer; min-height:68px;
+    box-shadow:0 4px 12px -6px rgba(10,42,58,0.18);
     transition:transform .15s ease, border-color .15s ease, background .15s ease, box-shadow .15s ease;
-    display:flex; align-items:center; gap:12px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; text-align:center;
     opacity:0; transform:translateY(10px);
     animation:choiceIn .4s ease forwards;
     position:relative; overflow:hidden;
@@ -237,12 +235,12 @@
   .choice:nth-child(4){animation-delay:.33s;}
   @keyframes choiceIn{ to{opacity:1; transform:translateY(0);} }
 
-  .choice .bullet{ width:26px;height:26px;flex:0 0 auto; border-radius:50%;
-    display:flex;align-items:center;justify-content:center; font-size:11px;font-weight:700; color:#fff;
+  .choice .bullet{ width:30px;height:30px;flex:0 0 auto; border-radius:50%;
+    display:flex;align-items:center;justify-content:center; font-size:13px;font-weight:700; color:#fff;
     background:linear-gradient(135deg,var(--blue),var(--teal));
     box-shadow:0 4px 10px -4px rgba(10,60,80,0.5); transition:all .2s ease; }
-  .choice:hover:not(:disabled){ border-color:var(--teal); background:#fff; transform:translateY(-2px); box-shadow:0 10px 20px -12px rgba(10,40,55,0.35); }
-  .choice:active:not(:disabled){ transform:translateY(0) scale(.98); }
+  .choice:hover:not(:disabled){ border-color:var(--teal); background:#fff; transform:translateY(-3px); box-shadow:0 12px 22px -12px rgba(10,40,55,0.4); }
+  .choice:active:not(:disabled){ transform:translateY(0) scale(.97); }
   .choice:disabled{ cursor:default; }
   .choice.correct{ background:#e8f6ee; border-color:var(--emerald); animation:pulseCorrect .45s ease; }
   @keyframes pulseCorrect{ 0%{transform:scale(1);} 40%{transform:scale(1.035);} 100%{transform:scale(1);} }
@@ -348,29 +346,22 @@
   @media (max-width:359px){
     body{ padding-left:10px; padding-right:10px; }
     .card{ padding:18px 14px 16px; }
-    .card-head{ flex-direction:column; text-align:center; gap:10px; }
-    .specimen-meta{ text-align:center; }
-    .choices{ gap:8px; }
-  }
-
-  /* Phones in landscape and small tablets - two-column choices */
-  @media (min-width:600px){
-    .app{ max-width:640px; }
-    .choices{ grid-template-columns:1fr 1fr; }
+    .choices{ grid-template-columns:1fr; gap:8px; }
   }
 
   /* iPad portrait and larger tablets */
   @media (min-width:768px){
     .app{ max-width:720px; }
-    .specimen-icon{ width:96px; height:96px; }
-    .specimen-icon svg{ width:56px; height:56px; }
     .brand p{ font-size:15px; }
+    .choice{ font-size:17px; min-height:76px; }
+    .q-icon{ width:92px; height:92px; }
+    .q-icon svg{ width:52px; height:52px; }
   }
 
   /* iPad landscape / small desktops */
   @media (min-width:1024px){
     .app{ max-width:800px; }
-    .choices{ gap:14px; }
+    .choices{ gap:16px; }
   }
 
   /* Short viewport (phones in landscape) */
@@ -383,7 +374,6 @@
     .brand p{ display:none; }
     .stats-panel{ padding:10px 14px; margin-bottom:10px; }
     .card{ padding:16px 18px 14px; }
-    .card-head{ margin-bottom:10px; }
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -452,13 +442,8 @@
     </div>
 
     <div id="quizView">
-      <div class="card-head">
-        <div class="specimen-icon" id="iconHolder"></div>
-        <div class="specimen-meta">
-          <span class="tag" id="herbTag">ตัวอย่างที่ 01</span>
-          <h2 id="herbName">ฟ้าทะลายโจร</h2>
-        </div>
-      </div>
+      <div class="q-icon" id="qIcon"></div>
+      <span class="q-tag" id="herbTag">ข้อที่ 1 / 5</span>
       <div class="question" id="questionText">สมุนไพรชนิดนี้นิยมใช้บรรเทาอาการใด?</div>
       <div class="choices" id="choicesHolder"></div>
     </div>
@@ -491,9 +476,10 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let currentResultId = null;
 
 async function saveRegistration(name, phone){
-  const { data, error } = await sb.from('quiz_results').insert({ name, phone }).select('id').single();
+  const id = crypto.randomUUID();
+  const { error } = await sb.from('quiz_results').insert({ id, name, phone });
   if(error){ console.error('Supabase insert error:', error); return null; }
-  return data.id;
+  return id;
 }
 
 async function saveScore(id, score, total, passed){
@@ -528,7 +514,7 @@ async function saveScore(id, score, total, passed){
   }
 })();
 
-/* ---------- richer botanical illustrations (layered, colorful) ---------- */
+/* ---------- themed illustrations shown above each question ---------- */
 const ICONS = {
   leafRound: (c,c2)=>`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M24 6C34 10 40 20 34 34C28 44 14 42 10 32C6 22 14 10 24 6Z" fill="${c2}" fill-opacity="0.25" stroke="${c}" stroke-width="2.2" stroke-linejoin="round"/>
@@ -567,11 +553,18 @@ const ICONS = {
     <path d="M24 44V20" stroke="${c}" stroke-width="2.2" stroke-linecap="round"/>
     <path d="M24 22c-2-8-1-14 2-18M24 26c4-6 10-8 15-6M24 32c-5-4-11-4-15-1M24 20c2-8 1-13-1-16"
       fill="${c2}" fill-opacity="0.2" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`,
+  bundle: (c,c2)=>`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 40C14 28 14 16 20 6" stroke="${c}" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M24 40C23 26 25 14 30 6" fill="${c2}" fill-opacity="0.15" stroke="${c}" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M32 40C33 30 35 20 38 12" stroke="${c}" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M12 40h28" stroke="${c2}" stroke-width="2.6" stroke-linecap="round"/>
   </svg>`
 };
-const HERB_COLORS = {
+const ICON_COLORS = {
   leafRound:['#4f7a54','#7fa87e'], rhizome:['#b8842e','#e0b563'], vine:['#6b8f6e','#a8c9a5'],
-  blade:['#3f7a56','#7fbf94'], flower:['#a0522e','#e0a35c'], pod:['#7d5a3c','#c7a06a'], succulent:['#5c8a4f','#a4cf8e']
+  blade:['#3f7a56','#7fbf94'], flower:['#a0522e','#e0a35c'], pod:['#7d5a3c','#c7a06a'],
+  succulent:['#5c8a4f','#a4cf8e'], bundle:['#4f7a54','#c98a3a']
 };
 
 const CHECK_ICON = `<svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -583,68 +576,38 @@ const CROSS_ICON = `<svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.or
   <path d="M18 18l16 16M34 18L18 34" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="46" stroke-dashoffset="46" style="animation:draw .5s ease .25s forwards"/>
 </svg>`;
 
-/* ---------- herb data (full pool of 20) ---------- */
-const HERBS = [
- {name:"ฟ้าทะลายโจร", icon:'leafRound', q:"สมุนไพรชนิดนี้นิยมใช้บรรเทาอาการใดเป็นหลัก?",
-  choices:["หวัด เจ็บคอ มีไข้","ปวดข้อรูมาตอยด์","ผมร่วง","ความดันโลหิตต่ำ"], a:0,
-  fb:"ฟ้าทะลายโจรมีสารแอนโดรกราโฟไลด์ ช่วยบรรเทาอาการหวัด เจ็บคอ และลดไข้ในระยะเริ่มต้น อยู่ในบัญชียาหลักแห่งชาติ"},
- {name:"ขมิ้นชัน", icon:'rhizome', q:"เหง้าขมิ้นชันมีสรรพคุณเด่นด้านใด?",
-  choices:["แก้ท้องอืด ท้องเฟ้อ จุกเสียด","ลดไข้สูงเฉียบพลัน","รักษาโรคหอบหืด","บำรุงสายตา"], a:0,
-  fb:"สารเคอร์คูมินในขมิ้นชันช่วยขับลม บรรเทาอาการท้องอืดท้องเฟ้อ และช่วยสมานแผลในกระเพาะอาหาร"},
- {name:"ขิง", icon:'rhizome', q:"ขิงถูกใช้เป็นยาสมุนไพรเพื่อจุดประสงค์ใด?",
-  choices:["แก้คลื่นไส้ อาเจียน ขับลม","รักษาโรคเบาหวาน","ลดคอเลสเตอรอล","แก้ปวดประจำเดือนรุนแรง"], a:0,
-  fb:"ขิงช่วยบรรเทาอาการคลื่นไส้ อาเจียน เมารถเมาเรือ และขับลมในกระเพาะอาหาร"},
- {name:"บัวบก", icon:'leafRound', q:"ใบบัวบกเป็นที่รู้จักดีในด้านใด?",
-  choices:["สมานแผล ช่วยแผลหายเร็ว","แก้ไอเรื้อรัง","รักษาโรคตับอักเสบ","ลดระดับน้ำตาลในเลือด"], a:0,
-  fb:"สารมาเดคาสโซไซด์ในบัวบกช่วยกระตุ้นการสร้างคอลลาเจน ทำให้แผลสมานตัวได้เร็วขึ้น นิยมใช้ทั้งกินและทาภายนอก"},
- {name:"ว่านหางจระเข้", icon:'succulent', q:"วุ้นว่านหางจระเข้นิยมใช้รักษาอาการใด?",
-  choices:["แผลไฟไหม้ น้ำร้อนลวก ผิวไหม้แดด","โรคกระเพาะปัสสาวะอักเสบ","ไข้หวัดใหญ่","โรคภูมิแพ้ทางเดินหายใจ"], a:0,
-  fb:"วุ้นใสจากว่านหางจระเข้มีฤทธิ์เย็นและช่วยลดการอักเสบ นิยมทาบรรเทาแผลไฟไหม้ น้ำร้อนลวก และผิวไหม้แดด"},
- {name:"มะขามแขก", icon:'pod', q:"ใบและฝักมะขามแขกใช้เป็นยาประเภทใด?",
-  choices:["ยาระบาย แก้ท้องผูก","ยาแก้ไอ ขับเสมหะ","ยาแก้แพ้ ลดผื่นคัน","ยาบำรุงหัวใจ"], a:0,
-  fb:"มะขามแขกมีสารแอนทราควิโนนที่กระตุ้นการบีบตัวของลำไส้ จึงใช้เป็นยาระบายรักษาอาการท้องผูก"},
- {name:"เพชรสังฆาต", icon:'vine', q:"เพชรสังฆาตในตำรายาไทยใช้รักษาโรคใดเป็นหลัก?",
-  choices:["ริดสีดวงทวาร","โรคเก๊าท์","โรคผิวหนังจากเชื้อรา","อาการวิงเวียนศีรษะ"], a:0,
-  fb:"เพชรสังฆาตเป็นไม้เลื้อยที่มีสรรพคุณช่วยลดอาการริดสีดวงทวาร ทั้งชนิดรับประทานและใช้ภายนอก"},
- {name:"ชุมเห็ดเทศ", icon:'leafRound', q:"ใบชุมเห็ดเทศตำผสมเหล้าใช้ทาแก้โรคใด?",
-  choices:["กลากเกลื้อน (โรคผิวหนังจากเชื้อรา)","โรคเบาหวาน","ไข้มาลาเรีย","ตาแดง"], a:0,
-  fb:"ใบชุมเห็ดเทศมีฤทธิ์ต้านเชื้อรา นิยมตำผสมเหล้าทาบริเวณที่เป็นกลากเกลื้อน"},
- {name:"ตะไคร้", icon:'blade', q:"ตะไคร้ในทางสมุนไพรมีฤทธิ์เด่นด้านใด?",
-  choices:["ขับปัสสาวะ ขับลมในกระเพาะ","ลดความดันโลหิตสูงเฉียบพลัน","รักษาโรคเก๊าท์","แก้ปวดหลังเรื้อรัง"], a:0,
-  fb:"ตะไคร้ช่วยขับปัสสาวะและขับลม บรรเทาอาการท้องอืดแน่นท้อง นิยมต้มดื่มเป็นน้ำสมุนไพร"},
- {name:"มะระขี้นก", icon:'vine', q:"ผลมะระขี้นกมีสรรพคุณที่เป็นที่รู้จักด้านใด?",
-  choices:["ช่วยลดระดับน้ำตาลในเลือด","แก้ไข้หวัดใหญ่","บำรุงสายตาในผู้สูงอายุ","ลดอาการปวดกล้ามเนื้อ"], a:0,
-  fb:"มะระขี้นกมีสารที่ช่วยลดระดับน้ำตาลในเลือด นิยมใช้เป็นอาหารเสริมสำหรับผู้ที่ดูแลระดับน้ำตาล"},
- {name:"รางจืด", icon:'vine', q:"รางจืดเป็นที่รู้จักในตำรายาไทยว่ามีสรรพคุณใด?",
-  choices:["ถอนพิษ แก้พิษเบื่อเมา","รักษาโรคหัวใจ","แก้ปวดฟัน","บำรุงครรภ์"], a:0,
-  fb:"รางจืดถูกใช้เป็นยาถอนพิษมาแต่โบราณ ทั้งพิษจากสัตว์ พิษยาฆ่าแมลง และสารพิษบางชนิด"},
- {name:"กระเทียม", icon:'pod', q:"กระเทียมมีสรรพคุณทางยาที่โดดเด่นในด้านใด?",
-  choices:["ช่วยลดไขมัน คอเลสเตอรอลในเลือด","รักษาโรคภูมิแพ้ผิวหนัง","แก้ปวดประจำเดือน","ลดอาการนอนไม่หลับ"], a:0,
-  fb:"สารอัลลิซินในกระเทียมช่วยลดไขมันและคอเลสเตอรอลในเลือด รวมถึงมีฤทธิ์ต้านจุลชีพ"},
- {name:"สะระแหน่", icon:'leafRound', q:"ใบสะระแหน่นิยมใช้บรรเทาอาการใด?",
-  choices:["ท้องอืด แน่นท้อง ขับลม","ไข้หวัดใหญ่รุนแรง","โรคผิวหนังอักเสบเรื้อรัง","ปวดหลังส่วนล่าง"], a:0,
-  fb:"น้ำมันหอมระเหยในใบสะระแหน่ช่วยขับลมและบรรเทาอาการท้องอืดแน่นท้องได้ดี"},
- {name:"มะแว้งต้น", icon:'flower', q:"ผลมะแว้งต้น/มะแว้งเครือ ใช้เป็นยาแก้อาการใด?",
-  choices:["แก้ไอ ขับเสมหะ ทำให้ชุ่มคอ","แก้ท้องเสียเฉียบพลัน","รักษาโรคเบาหวาน","แก้ปวดข้อเข่า"], a:0,
-  fb:"มะแว้งเป็นส่วนประกอบหลักในยาแก้ไอแผนโบราณ ช่วยขับเสมหะและทำให้ชุ่มคอ"},
- {name:"หญ้าหนวดแมว", icon:'blade', q:"หญ้าหนวดแมวในตำรับยาไทยใช้เพื่อจุดประสงค์ใด?",
-  choices:["ขับปัสสาวะ ช่วยขับนิ่วขนาดเล็ก","รักษาโรคหัวใจเต้นผิดจังหวะ","แก้ปวดหัวไมเกรน","บำรุงเลือด"], a:0,
-  fb:"หญ้าหนวดแมวมีฤทธิ์ขับปัสสาวะ ช่วยลดการตกตะกอนของนิ่วในทางเดินปัสสาวะ"},
- {name:"ลูกใต้ใบ", icon:'leafRound', q:"ลูกใต้ใบเป็นสมุนไพรที่นิยมใช้บำรุงอวัยวะใด?",
-  choices:["บำรุงตับ ลดอาการดีซ่าน","บำรุงหัวใจ","บำรุงไต","บำรุงปอด"], a:0,
-  fb:"ลูกใต้ใบถูกใช้ในตำรายาไทยเพื่อบำรุงตับและบรรเทาอาการดีซ่าน (ตัวเหลืองตาเหลือง)"},
- {name:"พญายอ", icon:'leafRound', q:"ใบพญายอ (เสลดพังพอนตัวเมีย) มีฤทธิ์เด่นด้านใด?",
-  choices:["รักษาเริม งูสวัด แก้พิษแมลงสัตว์กัดต่อย","รักษาโรคกระดูกพรุน","ลดความดันโลหิตสูง","แก้อาการนอนกรน"], a:0,
-  fb:"พญายอมีฤทธิ์ต้านไวรัสและลดการอักเสบ นิยมใช้ทาแก้โรคเริม งูสวัด และแก้พิษแมลงสัตว์กัดต่อย"},
- {name:"กระชาย", icon:'rhizome', q:"เหง้ากระชายในตำรายาไทยมีสรรพคุณด้านใด?",
-  choices:["บำรุงกำลัง ขับลม แก้ท้องอืด","ลดไข้สูงเฉียบพลัน","รักษาโรคผิวหนังอักเสบ","แก้ปวดฟันเรื้อรัง"], a:0,
-  fb:"กระชายได้รับฉายาว่า 'โสมไทย' ใช้บำรุงกำลังและขับลม บรรเทาอาการท้องอืดท้องเฟ้อ"},
- {name:"ทองพันชั่ง", icon:'leafRound', q:"ใบทองพันชั่งตำใช้ทาภายนอกเพื่อรักษาอาการใด?",
-  choices:["กลากเกลื้อน ผื่นคัน จากเชื้อรา","แผลไฟไหม้รุนแรง","อาการฟกช้ำจากอุบัติเหตุ","แมลงสัตว์กัดต่อยรุนแรง"], a:0,
-  fb:"ทองพันชั่งมีฤทธิ์ต้านเชื้อรา นิยมตำหรือทำเป็นทิงเจอร์ทารักษากลากเกลื้อนและผื่นคัน"},
- {name:"หญ้าดอกขาว", icon:'flower', q:"หญ้าดอกขาวเป็นสมุนไพรที่ได้รับการรับรองให้ใช้ช่วยเรื่องใด?",
-  choices:["ช่วยลดความอยากบุหรี่ในผู้ที่ต้องการเลิกสูบ","รักษาโรคภูมิแพ้ผิวหนัง","บำรุงรากผมป้องกันผมร่วง","ลดอาการปวดประจำเดือน"], a:0,
-  fb:"หญ้าดอกขาวอยู่ในบัญชียาหลักแห่งชาติ ใช้เป็นยาช่วยลดความอยากบุหรี่สำหรับผู้ที่ต้องการเลิกสูบ"}
+/* ---------- question pool (10 items, general-knowledge level) ---------- */
+const QUESTIONS = [
+ {q:"สมุนไพรชนิดใดมีสีเหลืองและนิยมนำมาใช้ในอาหารไทย?", icon:'rhizome',
+  choices:["ขมิ้นชัน","ตะไคร้","ใบเตย","โหระพา"], a:0,
+  fb:"ขมิ้นชันมีสีเหลืองทองเข้ม นิยมใส่ในแกงและอาหารไทยหลายชนิด"},
+ {q:"สมุนไพรชนิดใดเป็นส่วนประกอบสำคัญของต้มยำ?", icon:'blade',
+  choices:["ใบกะเพรา","ตะไคร้","ผักชี","คะน้า"], a:1,
+  fb:"ตะไคร้เป็นเครื่องเทศหลักที่ให้กลิ่นหอมเฉพาะตัวของต้มยำ"},
+ {q:"ใบเตยมีจุดเด่นในเรื่องใด?", icon:'blade',
+  choices:["ให้รสเผ็ด","ให้กลิ่นหอม","ให้รสเปรี้ยว","ให้รสขม"], a:1,
+  fb:"ใบเตยมีกลิ่นหอมเป็นเอกลักษณ์ นิยมใช้แต่งกลิ่นขนมและเครื่องดื่มไทย"},
+ {q:"ฟ้าทะลายโจรมีรสชาติอย่างไร?", icon:'leafRound',
+  choices:["หวาน","เปรี้ยว","ขม","มัน"], a:2,
+  fb:"ฟ้าทะลายโจรมีรสขมจัด เป็นลักษณะเด่นของสมุนไพรชนิดนี้"},
+ {q:"สมุนไพรชนิดใดมักนำมาต้มเป็นเครื่องดื่มเพื่อเพิ่มความสดชื่น?", icon:'blade',
+  choices:["ใบเตย","พริกไทย","กระชาย","ข่า"], a:0,
+  fb:"น้ำใบเตยมีกลิ่นหอมชื่นใจ นิยมต้มดื่มเพื่อความสดชื่น"},
+ {q:"ขิงนิยมใช้เพื่ออะไร?", icon:'rhizome',
+  choices:["เพิ่มสีของอาหาร","เพิ่มความหวาน","ช่วยให้ร่างกายอบอุ่น","ทำให้อาหารเย็นลง"], a:2,
+  fb:"ขิงมีฤทธิ์ร้อน ช่วยให้ร่างกายอบอุ่นและขับลม"},
+ {q:"สมุนไพรชนิดใดมีกลิ่นหอมและนิยมใช้ในการประกอบอาหารไทย?", icon:'blade',
+  choices:["ตะไคร้","กะหล่ำปลี","แตงกวา","ฟักทอง"], a:0,
+  fb:"ตะไคร้มีกลิ่นหอมเฉพาะตัว เป็นเครื่องเทศสำคัญของอาหารไทย"},
+ {q:"ข้อใดเป็นสมุนไพรไทยทั้งหมด?", icon:'bundle',
+  choices:["ขมิ้นชัน ตะไคร้ ขิง","แอปเปิล องุ่น ส้ม","มันฝรั่ง แครอท หอมหัวใหญ่","กะหล่ำปลี มะเขือเทศ แตงกวา"], a:0,
+  fb:"ขมิ้นชัน ตะไคร้ และขิง ล้วนเป็นสมุนไพรไทยที่ใช้ทั้งปรุงอาหารและเป็นยา"},
+ {q:"สมุนไพรชนิดใดนิยมใช้แต่งกลิ่นขนมไทย?", icon:'blade',
+  choices:["ใบเตย","พริก","กระเทียม","หอมแดง"], a:0,
+  fb:"ใบเตยให้กลิ่นหอมละมุน นิยมใช้แต่งกลิ่นขนมไทยหลายชนิด"},
+ {q:"สมุนไพรชนิดใดมีเหง้าอยู่ใต้ดิน?", icon:'rhizome',
+  choices:["ขิง","ใบมะกรูด","โหระพา","กะเพรา"], a:0,
+  fb:"ขิงเป็นพืชที่มีเหง้า (ลำต้นใต้ดิน) ใช้เป็นทั้งเครื่องเทศและสมุนไพร"}
 ];
 
 const ROUND_SIZE = 5;
@@ -730,7 +693,7 @@ async function validateAndStart(){
 }
 
 function startGame(){
-  order = shuffle(HERBS.map((_,i)=>i)).slice(0, ROUND_SIZE);
+  order = shuffle(QUESTIONS.map((_,i)=>i)).slice(0, ROUND_SIZE);
   pos = 0; score = 0; answered = false;
   document.getElementById('resultsView').classList.remove('show');
   document.getElementById('quizView').style.display = 'block';
@@ -742,21 +705,20 @@ function startGame(){
 function renderQuestion(){
   answered = false;
   const idx = order[pos];
-  const herb = HERBS[idx];
-  const [c1,c2] = HERB_COLORS[herb.icon];
+  const item = QUESTIONS[idx];
 
   const qv = document.getElementById('quizView');
   qv.style.animation = 'none'; void qv.offsetWidth; qv.style.animation = 'cardIn .4s cubic-bezier(.2,.85,.3,1) both';
 
-  document.getElementById('herbTag').textContent = `ตัวอย่างที่ ${pos+1} / ${ROUND_SIZE}`;
-  document.getElementById('herbName').textContent = herb.name;
-  document.getElementById('questionText').textContent = herb.q;
+  document.getElementById('herbTag').textContent = `ข้อที่ ${pos+1} / ${ROUND_SIZE}`;
+  document.getElementById('questionText').textContent = item.q;
 
-  const iconHolder = document.getElementById('iconHolder');
-  iconHolder.innerHTML = ICONS[herb.icon](c1,c2);
-  iconHolder.style.animation = 'none'; void iconHolder.offsetWidth; iconHolder.style.animation = 'iconPop .55s cubic-bezier(.3,1.4,.4,1) both';
+  const [c1,c2] = ICON_COLORS[item.icon];
+  const qIcon = document.getElementById('qIcon');
+  qIcon.innerHTML = ICONS[item.icon](c1,c2);
+  qIcon.style.animation = 'none'; void qIcon.offsetWidth; qIcon.style.animation = 'iconPop .55s cubic-bezier(.3,1.4,.4,1) both';
 
-  const choicesArr = herb.choices.map((text,i)=>({text, correct: i===herb.a}));
+  const choicesArr = item.choices.map((text,i)=>({text, correct: i===item.a}));
   const shuffledChoices = shuffle(choicesArr);
 
   const holder = document.getElementById('choicesHolder');
@@ -766,7 +728,7 @@ function renderQuestion(){
     const btn = document.createElement('button');
     btn.className = 'choice';
     btn.innerHTML = `<span class="bullet">${letters[i]}</span><span>${c.text}</span>`;
-    btn.addEventListener('click', (e)=>{ spawnRipple(btn, e); handleAnswer(btn, c.correct, herb); });
+    btn.addEventListener('click', (e)=>{ spawnRipple(btn, e); handleAnswer(btn, c.correct, item); });
     holder.appendChild(btn);
   });
 
@@ -803,7 +765,7 @@ function spawnSparks(btn){
   }
 }
 
-function handleAnswer(btn, isCorrect, herb){
+function handleAnswer(btn, isCorrect, item){
   if(answered) return;
   answered = true;
   if(isCorrect){
@@ -816,15 +778,15 @@ function handleAnswer(btn, isCorrect, herb){
   btn.classList.add(isCorrect ? 'correct' : 'wrong');
   if(!isCorrect){
     document.querySelectorAll('.choice').forEach(b=>{
-      if(b.textContent.includes(herb.choices[herb.a])) b.classList.add('correct');
+      if(b.textContent.includes(item.choices[item.a])) b.classList.add('correct');
     });
   }
 
   updateRail();
-  setTimeout(()=>openPopup(isCorrect, herb), 380);
+  setTimeout(()=>openPopup(isCorrect, item), 380);
 }
 
-function openPopup(isCorrect, herb){
+function openPopup(isCorrect, item){
   const overlay = document.getElementById('popupOverlay');
   const card = document.getElementById('popupCard');
   const iconHolder = document.getElementById('popupIcon');
@@ -834,7 +796,7 @@ function openPopup(isCorrect, herb){
 
   iconHolder.innerHTML = isCorrect ? CHECK_ICON : CROSS_ICON;
   document.getElementById('popupTitle').textContent = isCorrect ? 'ถูกต้อง!' : 'ยังไม่ถูก';
-  document.getElementById('popupText').innerHTML = herb.fb;
+  document.getElementById('popupText').innerHTML = item.fb;
 
   overlay.classList.add('show');
   if(isCorrect) spawnSparks(iconHolder);
