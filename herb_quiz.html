@@ -232,14 +232,14 @@
   .question{ font-family:'Noto Serif Thai',serif; font-size:clamp(19px,4.6vw,24px); line-height:1.5; margin:0 2px 20px; font-weight:700; color:var(--ink); text-align:center; animation:fadeUp .5s ease .1s both; }
   @keyframes fadeUp{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
 
-  .choices{ display:grid; gap:12px; grid-template-columns:1fr 1fr; }
+  .choices{ display:grid; gap:12px; grid-template-columns:1fr; }
   .choice{
     text-align:left; background:var(--panel-soft); border:2px solid var(--panel-line);
-    border-radius:16px; padding:16px; font-family:inherit; font-size:15.5px; font-weight:600; color:var(--ink);
-    cursor:pointer; min-height:68px;
+    border-radius:16px; padding:16px 20px; font-family:inherit; font-size:15.5px; font-weight:600; color:var(--ink);
+    cursor:pointer; min-height:60px;
     box-shadow:0 4px 12px -6px rgba(10,42,58,0.18);
     transition:transform .15s ease, border-color .15s ease, background .15s ease, box-shadow .15s ease;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; text-align:center;
+    display:flex; flex-direction:row; align-items:center; justify-content:flex-start; gap:16px;
     opacity:0; transform:translateY(14px) scale(.9);
     animation:choiceIn .5s cubic-bezier(.2,1.4,.4,1) forwards;
     position:relative; overflow:hidden;
@@ -369,7 +369,7 @@
   @media (max-width:359px){
     body{ padding-left:10px; padding-right:10px; }
     .card{ padding:18px 14px 16px; }
-    .choices{ grid-template-columns:1fr; gap:8px; }
+    .choices{ gap:8px; }
   }
 
   /* iPad portrait and larger tablets */
@@ -385,6 +385,38 @@
   @media (min-width:1024px){
     .app{ max-width:800px; }
     .choices{ gap:16px; }
+  }
+
+  /* Large kiosk / display screens (e.g. 20" landscape touchscreens) */
+  @media (min-width:1400px){
+    .app{ max-width:1040px; }
+    .site-header{ width:clamp(220px,18vw,320px); }
+    .brand .eyebrow{ font-size:16px; }
+    .brand h1{ font-size:54px; }
+    .brand p{ font-size:19px; }
+    .stats-panel{ padding:20px 26px 18px; }
+    .rail .track{ height:12px; }
+    .rail .score{ font-size:20px; }
+    .card{ padding:56px 56px 48px; }
+    .q-icon{ width:120px; height:120px; }
+    .q-icon svg{ width:68px; height:68px; }
+    .q-tag{ font-size:16px; }
+    .question{ font-size:32px; margin-bottom:32px; }
+    .choices{ gap:20px; }
+    .choice{ font-size:22px; min-height:88px; padding:22px 28px; border-radius:20px; }
+    .choice .bullet{ width:40px; height:40px; font-size:16px; }
+    .btn{ font-size:20px; padding:18px 36px; min-height:64px; }
+    .results h3{ font-size:34px; }
+    .results p{ font-size:18px; }
+    .start-view h2{ font-size:34px; }
+    .start-view > p{ font-size:18px; }
+    .field label{ font-size:16px; }
+    .field input{ font-size:20px; padding:18px 20px; min-height:60px; }
+    .popup-card{ max-width:520px; }
+    .popup-title{ font-size:32px; }
+    .popup-text{ font-size:18px; }
+    .popup-icon{ width:110px; height:110px; }
+    .popup-icon svg{ width:60px; height:60px; }
   }
 
   /* Short viewport (phones in landscape) */
