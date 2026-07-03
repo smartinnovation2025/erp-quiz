@@ -350,6 +350,56 @@
   .popup-card--wrong .btn{ color:var(--coral-deep); }
   .popup-card .btn:hover{ transform:translateY(-2px); box-shadow:0 14px 26px -8px rgba(0,0,0,0.4); }
 
+  /* ---------- admin gear button + modals ---------- */
+  .admin-fab{
+    position:fixed; right:16px; bottom:16px; z-index:40;
+    width:42px; height:42px; border-radius:50%; border:none; cursor:pointer;
+    background:rgba(255,255,255,0.12); color:var(--mist-dim);
+    display:flex; align-items:center; justify-content:center; font-size:18px;
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,0.18);
+    opacity:0.55; transition:opacity .2s ease, transform .2s ease;
+  }
+  .admin-fab:hover{ opacity:1; transform:rotate(45deg); }
+
+  .admin-overlay{
+    position:fixed; inset:0; z-index:70; display:flex; align-items:center; justify-content:center;
+    padding:20px; background:rgba(5,16,20,0.65); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    opacity:0; visibility:hidden; transition:opacity .2s ease, visibility .2s ease;
+  }
+  .admin-overlay.show{ opacity:1; visibility:visible; }
+  .admin-modal{
+    width:100%; max-width:360px; background:var(--panel); color:var(--ink); border-radius:20px;
+    padding:26px 24px; text-align:left; box-shadow:0 30px 60px -18px rgba(0,0,0,0.55);
+    transform:scale(.85); transition:transform .2s ease;
+  }
+  .admin-overlay.show .admin-modal{ transform:scale(1); }
+  .admin-modal h3{ font-family:'Noto Serif Thai',serif; font-size:20px; margin:0 0 14px; color:var(--ink); }
+  .admin-modal .field{ margin-bottom:12px; }
+  .admin-status{ font-size:13.5px; color:var(--ink-soft); margin:0 0 16px; padding:10px 12px; border-radius:10px; background:var(--panel-soft); }
+  .admin-status b{ color:var(--teal-deep); }
+  .admin-row{ display:flex; gap:10px; margin-bottom:16px; }
+  .admin-row .btn{ flex:1; font-size:13px; padding:11px 14px; min-height:42px; justify-content:center; }
+  .admin-btn-danger{ background-image:linear-gradient(120deg,var(--coral),var(--coral-deep)) !important; }
+  .admin-modal-actions{ display:flex; gap:10px; margin-top:6px; }
+  .admin-modal-actions .btn{ flex:1; justify-content:center; font-size:13.5px; padding:11px 14px; min-height:44px; }
+  .admin-btn-ghost{ background-image:none !important; background:var(--panel-soft) !important; color:var(--ink-soft) !important; box-shadow:none !important; }
+
+  .closed-view{ display:none; text-align:center; padding:10px 4px; }
+  .closed-view .lock-icon{
+    width:76px; height:76px; margin:0 auto 16px; border-radius:50%;
+    background:var(--panel-soft); display:flex; align-items:center; justify-content:center;
+    box-shadow:0 8px 18px -10px rgba(10,42,58,0.4); animation:iconPop .55s cubic-bezier(.3,1.4,.4,1) both;
+  }
+  .closed-view .lock-icon svg{ width:36px; height:36px; }
+  .closed-view h2{ font-family:'Noto Serif Thai',serif; font-size:clamp(21px,5vw,25px); margin:0 0 8px; color:var(--ink); }
+  .closed-view p{ font-size:14px; color:var(--ink-soft); margin:0 0 18px; line-height:1.6; }
+  .closed-view .countdown{
+    font-family:'Noto Serif Thai',serif; font-weight:700; font-size:clamp(34px,9vw,46px); color:var(--teal-deep);
+    letter-spacing:0.05em; margin-bottom:6px;
+  }
+  .closed-view .countdown-label{ font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-soft); }
+
   .btn{ font-family:'Noto Sans Thai',sans-serif; font-weight:700; font-size:14px; padding:12px 24px; border-radius:999px;
     border:none; cursor:pointer; color:#fff;
     background-image:linear-gradient(120deg,var(--teal),var(--blue),var(--gold),var(--teal)); background-size:300% 100%;
@@ -394,12 +444,31 @@
   @keyframes stampPop{ from{opacity:0; transform:scale(.3) rotate(-25deg);} to{opacity:1; transform:scale(1) rotate(0);} }
   .results .stamp .n{ position:relative; z-index:1; font-size:clamp(30px,8vw,38px); font-weight:700; line-height:1; color:var(--ink); font-family:'Noto Serif Thai',serif; }
   .results .stamp .d{ position:relative; z-index:1; font-size:11px; opacity:0.75; margin-top:2px; color:var(--ink-soft); }
+  .pct-badge{
+    display:inline-block; margin:0 0 10px; padding:6px 18px; border-radius:999px;
+    font-family:'Noto Serif Thai',serif; font-weight:700; font-size:15px; color:#fff;
+    background:linear-gradient(120deg,var(--gold),var(--gold-deep)); box-shadow:0 6px 16px -6px rgba(193,133,42,.6);
+    animation:fadeUp .5s ease .25s both;
+  }
+  .results--fail .pct-badge{ background:linear-gradient(120deg,var(--teal),var(--teal-deep)); box-shadow:0 6px 16px -6px rgba(13,114,102,.6); }
   .results h3{ font-family:'Noto Serif Thai',serif; font-size:clamp(20px,4.6vw,24px); margin:0 0 6px; color:var(--ink); animation:fadeUp .5s ease .3s both; }
   .results p{ color:var(--ink-soft); font-size:14px; margin:0 0 20px; line-height:1.6; animation:fadeUp .5s ease .4s both; }
   .results .btn{ animation-delay:.5s; }
 
   .confetti{ position:absolute; top:-10px; opacity:0.95; animation:fall linear forwards; }
   @keyframes fall{ to{ transform:translateY(340px) rotate(600deg); opacity:0; } }
+
+  .firework-particle{
+    position:fixed; width:6px; height:6px; border-radius:50%;
+    pointer-events:none; z-index:60;
+    animation:fireworkOut .95s cubic-bezier(.15,.6,.3,1) forwards;
+    box-shadow:0 0 8px currentColor;
+  }
+  @keyframes fireworkOut{
+    0%{ transform:translate(0,0) scale(1); opacity:1; }
+    75%{ opacity:1; }
+    100%{ transform:translate(var(--dx),var(--dy)) scale(0.3); opacity:0; }
+  }
 
   /* ================= Responsive breakpoints ================= */
   /* Small phones */
@@ -510,6 +579,42 @@
   </div>
 </div>
 
+<button class="admin-fab" id="adminFab" title="ตั้งค่า Admin">⚙️</button>
+
+<div class="admin-overlay" id="adminPinOverlay">
+  <div class="admin-modal">
+    <h3>เข้าสู่ระบบ Admin</h3>
+    <div class="field">
+      <label for="adminPinInput">รหัส PIN</label>
+      <input type="password" id="adminPinInput" placeholder="••••" inputmode="numeric" maxlength="8">
+    </div>
+    <div class="start-error" id="adminPinError"></div>
+    <div class="admin-modal-actions">
+      <button class="btn admin-btn-ghost show" id="adminPinCancel">ยกเลิก</button>
+      <button class="btn show btn--glow" id="adminPinSubmit">เข้าสู่ระบบ</button>
+    </div>
+  </div>
+</div>
+
+<div class="admin-overlay" id="adminPanelOverlay">
+  <div class="admin-modal">
+    <h3>ตั้งค่ารอบเล่น</h3>
+    <p class="admin-status" id="adminStatusText">สถานะ: <b>เปิดอยู่</b></p>
+    <div class="admin-row">
+      <button class="btn show btn--alt" id="adminOpenBtn">เปิดรอบทันที</button>
+      <button class="btn show admin-btn-danger" id="adminCloseBtn">ปิดรอบทันที</button>
+    </div>
+    <div class="field">
+      <label for="adminMinutesInput">ตั้งเวลาเปิดรอบถัดไปในอีก (นาที)</label>
+      <input type="number" id="adminMinutesInput" min="1" placeholder="เช่น 15">
+    </div>
+    <div class="admin-modal-actions">
+      <button class="btn admin-btn-ghost show" id="adminPanelClose">ปิดหน้าต่าง</button>
+      <button class="btn show btn--glow" id="adminSetTimerBtn">ตั้งเวลา</button>
+    </div>
+  </div>
+</div>
+
 <div class="app">
   <header class="site-header">
     <div class="site-header__glow"></div>
@@ -537,6 +642,19 @@
    <div class="card-glow"></div>
    <div class="card-edge"></div>
    <div class="card">
+    <div class="closed-view" id="closedView">
+      <div class="lock-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="5" y="11" width="14" height="9" rx="2" stroke="#2f6fb0" stroke-width="1.8"/>
+          <path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#159c8c" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h2>ปิดรอกิจกรรมพิเศษ</h2>
+      <p id="closedMessage">จะเปิดรอบอีกครั้งเร็ว ๆ นี้</p>
+      <div class="countdown" id="closedCountdown">--:--</div>
+      <div class="countdown-label" id="closedCountdownLabel"></div>
+    </div>
+
     <div class="start-view" id="startView">
       <span class="eyebrow">ลงทะเบียนผู้เล่น</span>
       <h2>ก่อนเริ่มเล่น กรอกข้อมูลของคุณ</h2>
@@ -562,6 +680,7 @@
 
     <div class="results" id="resultsView">
       <div class="stamp"><span class="n" id="finalScore">0</span><span class="d" id="finalTotal">/ 3</span></div>
+      <div class="pct-badge" id="pctBadge">0%</div>
       <h3 id="resultTitle">เก่งมาก!</h3>
       <p id="resultDesc">คุณจดจำสรรพคุณสมุนไพรไทยได้ดีทีเดียว</p>
       <button class="btn show btn--alt btn--glow" id="restartBtn">เล่นรอบใหม่ ⟳</button>
@@ -849,9 +968,36 @@ function refreshDots(){
   });
 }
 
+/* ---------- round open/close (admin-controlled, single device) ---------- */
+const ADMIN_PIN = '1234';
+let countdownTimer = null;
+
+function getRoundState(){
+  return {
+    roundOpen: localStorage.getItem('roundOpen') !== 'false',
+    nextRoundAt: Number(localStorage.getItem('nextRoundAt')) || null
+  };
+}
+function isRoundOpen(){
+  const { roundOpen, nextRoundAt } = getRoundState();
+  if(roundOpen) return true;
+  if(nextRoundAt && Date.now() >= nextRoundAt) return true;
+  return false;
+}
+function setRoundOpen(open){
+  localStorage.setItem('roundOpen', open ? 'true' : 'false');
+  if(open) localStorage.removeItem('nextRoundAt');
+}
+function setNextRoundAt(ms){
+  localStorage.setItem('roundOpen', 'false');
+  localStorage.setItem('nextRoundAt', String(ms));
+}
+
 function showStartView(){
+  if(!isRoundOpen()){ showClosedView(); return; }
   document.getElementById('resultsView').classList.remove('show');
   document.getElementById('quizView').style.display = 'none';
+  document.getElementById('closedView').style.display = 'none';
   document.getElementById('statsPanel').style.display = 'none';
   document.getElementById('playerName').value = '';
   document.getElementById('playerPhone').value = '';
@@ -861,6 +1007,47 @@ function showStartView(){
   const sv = document.getElementById('startView');
   sv.style.display = 'block';
   sv.style.animation = 'none'; void sv.offsetWidth; sv.style.animation = 'cardIn .45s cubic-bezier(.2,.85,.3,1) both';
+}
+
+function showClosedView(){
+  document.getElementById('resultsView').classList.remove('show');
+  document.getElementById('quizView').style.display = 'none';
+  document.getElementById('startView').style.display = 'none';
+  document.getElementById('statsPanel').style.display = 'none';
+  const cv = document.getElementById('closedView');
+  cv.style.display = 'block';
+  cv.style.animation = 'none'; void cv.offsetWidth; cv.style.animation = 'cardIn .45s cubic-bezier(.2,.85,.3,1) both';
+
+  if(countdownTimer) clearInterval(countdownTimer);
+  updateClosedCountdown();
+  countdownTimer = setInterval(updateClosedCountdown, 1000);
+}
+
+function updateClosedCountdown(){
+  const { nextRoundAt } = getRoundState();
+  const msgEl = document.getElementById('closedMessage');
+  const cdEl = document.getElementById('closedCountdown');
+  const labelEl = document.getElementById('closedCountdownLabel');
+
+  if(isRoundOpen()){
+    clearInterval(countdownTimer);
+    showStartView();
+    return;
+  }
+
+  if(!nextRoundAt){
+    msgEl.textContent = 'จะเปิดรอบอีกครั้งเร็ว ๆ นี้';
+    cdEl.textContent = '--:--';
+    labelEl.textContent = '';
+    return;
+  }
+
+  const remain = Math.max(0, nextRoundAt - Date.now());
+  const mm = Math.floor(remain / 60000);
+  const ss = Math.floor((remain % 60000) / 1000);
+  msgEl.textContent = 'จะเปิดรอบอีก';
+  cdEl.textContent = `${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+  labelEl.textContent = 'นาที : วินาที';
 }
 
 async function validateAndStart(){
@@ -1046,6 +1233,36 @@ function launchConfetti(){
   }
 }
 
+function launchFireworks(){
+  const colors = ['#e3a53d','#38a973','#159c8c','#2f6fb0','#e35847','#ffffff'];
+  const bursts = 7;
+  for(let b=0; b<bursts; b++){
+    setTimeout(()=>{
+      const xPct = 12 + Math.random()*76;
+      const yPct = 12 + Math.random()*46;
+      spawnFireworkBurst(xPct, yPct, colors);
+    }, b*350 + Math.random()*200);
+  }
+}
+function spawnFireworkBurst(xPct, yPct, colors){
+  const count = 26;
+  for(let i=0;i<count;i++){
+    const p = document.createElement('div');
+    p.className = 'firework-particle';
+    const angle = (Math.PI*2*i)/count + Math.random()*0.3;
+    const dist = 70 + Math.random()*90;
+    p.style.left = xPct + 'vw';
+    p.style.top = yPct + 'vh';
+    p.style.setProperty('--dx', Math.cos(angle)*dist + 'px');
+    p.style.setProperty('--dy', Math.sin(angle)*dist + 'px');
+    const color = colors[i % colors.length];
+    p.style.background = color;
+    p.style.color = color;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(), 1000);
+  }
+}
+
 function showResults(){
   document.getElementById('progressFill').style.width = '100%';
   document.getElementById('quizView').style.display = 'none';
@@ -1055,7 +1272,9 @@ function showResults(){
   document.getElementById('finalTotal').textContent = `/ ${ROUND_SIZE}`;
 
   const pct = score / ROUND_SIZE;
-  document.querySelector('.stamp').style.setProperty('--pct', (pct*100) + '%');
+  const pctRounded = Math.round(pct*100);
+  document.querySelector('.stamp').style.setProperty('--pct', pctRounded + '%');
+  document.getElementById('pctBadge').textContent = pctRounded + '%';
 
   const rvEl = document.getElementById('resultsView');
   rvEl.classList.remove('results--pass','results--fail');
@@ -1063,12 +1282,13 @@ function showResults(){
   let title, desc;
   if(pct >= 0.8){
     title = 'ยินดีด้วย! 🎉 คุณได้รับรางวัล';
-    desc = `คุณ ${playerName} ทำได้ ${score}/${ROUND_SIZE} ข้อ ผ่านเกณฑ์ 80% เก่งมากจริง ๆ รับรางวัลไปเลย!`;
+    desc = `คุณ ${playerName} ทำได้ ${score}/${ROUND_SIZE} ข้อ (${pctRounded}%) ผ่านเกณฑ์ 80% เก่งมากจริง ๆ รับรางวัลไปเลย!`;
     rvEl.classList.add('results--pass');
     launchConfetti();
+    launchFireworks();
   } else {
     title = 'เกือบแล้ว ลองอีกครั้งนะ';
-    desc = `คุณ ${playerName} ทำได้ ${score}/${ROUND_SIZE} ข้อ ยังไม่ถึงเกณฑ์ 80% ไม่เป็นไรนะ ทบทวนแล้วลองใหม่อีกครั้ง เป็นกำลังใจให้!`;
+    desc = `คุณ ${playerName} ทำได้ ${score}/${ROUND_SIZE} ข้อ (${pctRounded}%) ยังไม่ถึงเกณฑ์ 80% ไม่เป็นไรนะ ทบทวนแล้วลองใหม่อีกครั้ง เป็นกำลังใจให้!`;
     rvEl.classList.add('results--fail');
   }
   document.getElementById('resultTitle').textContent = title;
@@ -1081,6 +1301,70 @@ document.getElementById('startBtn').addEventListener('click', validateAndStart);
 document.getElementById('playerName').addEventListener('input', (e)=>{ e.target.classList.remove('error'); document.getElementById('startError').textContent=''; });
 document.getElementById('playerPhone').addEventListener('input', (e)=>{ e.target.classList.remove('error'); document.getElementById('startError').textContent=''; });
 document.getElementById('restartBtn').addEventListener('click', showStartView);
+
+/* ---------- admin panel wiring ---------- */
+function openAdminPin(){
+  document.getElementById('adminPinInput').value = '';
+  document.getElementById('adminPinError').textContent = '';
+  document.getElementById('adminPinOverlay').classList.add('show');
+  document.getElementById('adminPinInput').focus();
+}
+function closeAdminPin(){
+  document.getElementById('adminPinOverlay').classList.remove('show');
+}
+function refreshAdminPanel(){
+  const { roundOpen, nextRoundAt } = getRoundState();
+  const statusEl = document.getElementById('adminStatusText');
+  if(isRoundOpen()){
+    statusEl.innerHTML = 'สถานะ: <b>เปิดอยู่</b>';
+  } else if(nextRoundAt){
+    const mins = Math.ceil((nextRoundAt - Date.now())/60000);
+    statusEl.innerHTML = `สถานะ: <b>ปิดอยู่</b> — จะเปิดในอีก ${mins} นาที`;
+  } else {
+    statusEl.innerHTML = 'สถานะ: <b>ปิดอยู่</b>';
+  }
+}
+function openAdminPanel(){
+  refreshAdminPanel();
+  document.getElementById('adminPanelOverlay').classList.add('show');
+}
+function closeAdminPanel(){
+  document.getElementById('adminPanelOverlay').classList.remove('show');
+}
+
+document.getElementById('adminFab').addEventListener('click', openAdminPin);
+document.getElementById('adminPinCancel').addEventListener('click', closeAdminPin);
+document.getElementById('adminPinSubmit').addEventListener('click', ()=>{
+  const val = document.getElementById('adminPinInput').value.trim();
+  if(val === ADMIN_PIN){
+    closeAdminPin();
+    openAdminPanel();
+  } else {
+    document.getElementById('adminPinError').textContent = 'รหัส PIN ไม่ถูกต้อง';
+  }
+});
+document.getElementById('adminPinInput').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter') document.getElementById('adminPinSubmit').click();
+});
+document.getElementById('adminPanelClose').addEventListener('click', closeAdminPanel);
+document.getElementById('adminOpenBtn').addEventListener('click', ()=>{
+  setRoundOpen(true);
+  refreshAdminPanel();
+  if(document.getElementById('closedView').style.display === 'block') showStartView();
+});
+document.getElementById('adminCloseBtn').addEventListener('click', ()=>{
+  setRoundOpen(false);
+  refreshAdminPanel();
+  if(document.getElementById('startView').style.display === 'block') showClosedView();
+});
+document.getElementById('adminSetTimerBtn').addEventListener('click', ()=>{
+  const mins = Number(document.getElementById('adminMinutesInput').value);
+  if(!mins || mins <= 0) return;
+  setNextRoundAt(Date.now() + mins*60000);
+  refreshAdminPanel();
+  document.getElementById('adminMinutesInput').value = '';
+  if(document.getElementById('startView').style.display === 'block') showClosedView();
+});
 
 showStartView();
 </script>
