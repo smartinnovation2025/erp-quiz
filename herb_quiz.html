@@ -64,13 +64,23 @@
   .backdrop::after{
     content:"";
     position:absolute; inset:0;
-    background-image:radial-gradient(circle at 20px 20px, rgba(234,246,242,0.04) 1.5px, transparent 1.5px);
-    background-size:34px 34px;
-    animation:driftBg 60s linear infinite;
+    background-image:
+      linear-gradient(rgba(234,246,242,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(234,246,242,0.06) 1px, transparent 1px);
+    background-size:46px 46px;
+    animation:driftBg 70s linear infinite;
+    mask-image:radial-gradient(circle at 50% 38%, black 0%, transparent 78%);
+    -webkit-mask-image:radial-gradient(circle at 50% 38%, black 0%, transparent 78%);
   }
-  @keyframes driftBg{ from{background-position:0 0;} to{background-position:340px 340px;} }
+  @keyframes driftBg{ from{background-position:0 0;} to{background-position:368px 368px;} }
   .vignette{ position:fixed; inset:0; z-index:0; pointer-events:none;
     background:radial-gradient(1100px 800px at 50% 45%, transparent 45%, rgba(5,16,20,0.55) 100%); }
+  .scanline{ position:fixed; inset:0; z-index:1; pointer-events:none; mix-blend-mode:screen;
+    background:linear-gradient(180deg, transparent 0%, rgba(21,156,140,0.07) 50%, transparent 100%);
+    background-size:100% 340%;
+    animation:scanSweep 9s ease-in-out infinite;
+  }
+  @keyframes scanSweep{ 0%{background-position:0 -120%;} 100%{background-position:0 220%;} }
 
   .particles{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
   .leaf{ position:absolute; bottom:-40px; opacity:0; animation:floatUp linear infinite; }
@@ -153,11 +163,19 @@
   .card-wrap{ position:relative; perspective:900px; }
   .card-glow{
     position:absolute; inset:-16px; z-index:-1; border-radius:28px;
-    background:conic-gradient(from 0deg,var(--blue),var(--teal),var(--emerald),var(--gold),var(--blue));
-    filter:blur(30px); opacity:0.45;
-    animation:auroraSpin 11s linear infinite;
+    background:linear-gradient(120deg,var(--blue),var(--teal),var(--emerald),var(--gold),var(--blue));
+    background-size:300% 300%;
+    filter:blur(30px); opacity:0.4;
+    animation:auroraShift 14s ease-in-out infinite;
   }
-  @keyframes auroraSpin{ to{ transform:rotate(360deg); } }
+  .card-edge{
+    position:absolute; inset:-2px; z-index:-1; border-radius:24px;
+    background:linear-gradient(120deg,var(--blue),var(--teal),var(--emerald),var(--gold),var(--blue));
+    background-size:300% 300%;
+    filter:blur(1.5px); opacity:0.85;
+    animation:auroraShift 9s ease-in-out infinite;
+  }
+  @keyframes auroraShift{ 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
 
   .card{
     background:var(--panel); color:var(--ink); border-radius:clamp(16px,3.4vw,24px);
@@ -228,6 +246,12 @@
   @keyframes draw{ to{stroke-dashoffset:0;} }
 
   .q-tag{ font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--teal-deep); font-weight:700; display:block; text-align:center; margin:0 0 8px; }
+  .q-tag::before{
+    content:""; display:inline-block; width:6px; height:6px; border-radius:50%;
+    background:var(--gold); margin-right:7px; vertical-align:middle;
+    box-shadow:0 0 6px rgba(227,165,61,.8);
+    animation:dotPulse 1.4s ease-in-out infinite;
+  }
 
   .question{ font-family:'Noto Serif Thai',serif; font-size:clamp(19px,4.6vw,24px); line-height:1.5; margin:0 2px 20px; font-weight:700; color:var(--ink); text-align:center; animation:fadeUp .5s ease .1s both; }
   @keyframes fadeUp{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
@@ -254,11 +278,24 @@
     100%{ opacity:1; transform:translateY(0) scale(1); }
   }
 
+  .choice::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:4px;
+    background:linear-gradient(180deg,var(--blue),var(--teal),var(--emerald));
+    opacity:0; transition:opacity .2s ease;
+  }
+  .choice::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(100deg, transparent 40%, rgba(255,255,255,0.55) 50%, transparent 60%);
+    background-size:250% 100%; background-position:150% 0;
+    transition:background-position .6s ease;
+  }
+  .choice:hover:not(:disabled)::before{ opacity:1; }
+  .choice:hover:not(:disabled)::after{ background-position:-50% 0; }
   .choice .bullet{ width:30px;height:30px;flex:0 0 auto; border-radius:50%;
     display:flex;align-items:center;justify-content:center; font-size:13px;font-weight:700; color:#fff;
     background:linear-gradient(135deg,var(--blue),var(--teal));
     box-shadow:0 4px 10px -4px rgba(10,60,80,0.5); transition:all .2s ease; }
-  .choice:hover:not(:disabled){ border-color:var(--teal); background:#fff; transform:translateY(-3px); box-shadow:0 12px 22px -12px rgba(10,40,55,0.4); }
+  .choice:hover:not(:disabled){ border-color:var(--teal); background:#fff; transform:translateY(-3px) translateX(2px); box-shadow:0 12px 22px -12px rgba(10,40,55,0.4); }
   .choice:active:not(:disabled){ transform:translateY(0) scale(.97); }
   .choice:disabled{ cursor:default; }
   .choice.correct{ background:#e8f6ee; border-color:var(--emerald); animation:pulseCorrect .45s ease; }
@@ -315,14 +352,14 @@
 
   .btn{ font-family:'Noto Sans Thai',sans-serif; font-weight:700; font-size:14px; padding:12px 24px; border-radius:999px;
     border:none; cursor:pointer; color:#fff;
-    background-image:linear-gradient(120deg,var(--teal),var(--blue),var(--teal)); background-size:220% 100%;
+    background-image:linear-gradient(120deg,var(--teal),var(--blue),var(--gold),var(--teal)); background-size:300% 100%;
     min-height:46px; display:none; align-items:center; gap:8px;
     box-shadow:0 10px 22px -10px rgba(15,80,90,0.55);
     transition:opacity .15s ease, transform .15s ease, box-shadow .2s ease; }
   .btn:hover{ transform:translateY(-2px); }
   .btn:active{ transform:translateY(0); }
   .btn.show{ display:inline-flex; animation:fadeUp .35s ease both; }
-  .btn--alt{ background-image:linear-gradient(120deg,var(--emerald),var(--teal-deep),var(--emerald)); background-size:220% 100%; }
+  .btn--alt{ background-image:linear-gradient(120deg,var(--emerald),var(--teal-deep),var(--gold),var(--emerald)); background-size:300% 100%; }
   .btn.show.btn--glow{ animation:fadeUp .35s ease both, btnGradient 4s ease-in-out infinite, btnGlow 2.6s ease-in-out infinite; }
   @keyframes btnGradient{ 0%{background-position:0% 0;} 50%{background-position:100% 0;} 100%{background-position:0% 0;} }
   @keyframes btnGlow{ 0%,100%{ box-shadow:0 10px 22px -10px rgba(15,80,90,.55);} 50%{ box-shadow:0 14px 32px -6px rgba(21,156,140,.8);} }
@@ -419,6 +456,22 @@
     .popup-icon svg{ width:60px; height:60px; }
   }
 
+  /* 21.5" landscape monitors (~1920px viewport) - extra clarity pass */
+  @media (min-width:1800px){
+    .app{ max-width:1160px; }
+    .site-header{ width:clamp(240px,17vw,340px); }
+    .brand h1{ font-size:62px; }
+    .brand p{ font-size:21px; }
+    .card{ padding:64px 64px 54px; }
+    .q-icon{ width:132px; height:132px; }
+    .q-icon svg{ width:74px; height:74px; }
+    .q-tag{ font-size:17px; }
+    .question{ font-size:37px; margin-bottom:36px; }
+    .choice{ font-size:25px; min-height:96px; padding:24px 30px; }
+    .choice .bullet{ width:44px; height:44px; font-size:18px; }
+    .btn{ font-size:22px; padding:20px 40px; min-height:68px; }
+  }
+
   /* Short viewport (phones in landscape) */
   @media (max-height:480px) and (orientation:landscape){
     body{ align-items:flex-start; padding-top:16px; padding-bottom:16px; }
@@ -445,6 +498,7 @@
   <div class="blob b4"></div>
 </div>
 <div class="vignette"></div>
+<div class="scanline"></div>
 <div class="particles" id="particles"></div>
 
 <div class="popup-overlay" id="popupOverlay">
@@ -481,6 +535,7 @@
 
   <div class="card-wrap">
    <div class="card-glow"></div>
+   <div class="card-edge"></div>
    <div class="card">
     <div class="start-view" id="startView">
       <span class="eyebrow">ลงทะเบียนผู้เล่น</span>
@@ -665,7 +720,97 @@ const QUESTIONS = [
   fb:"ใบเตยให้กลิ่นหอมละมุน นิยมใช้แต่งกลิ่นขนมไทยหลายชนิด"},
  {q:"สมุนไพรชนิดใดมีเหง้าอยู่ใต้ดิน?", icon:'rhizome',
   choices:["ขิง","ใบมะกรูด","โหระพา","กะเพรา"], a:0,
-  fb:"ขิงเป็นพืชที่มีเหง้า (ลำต้นใต้ดิน) ใช้เป็นทั้งเครื่องเทศและสมุนไพร"}
+  fb:"ขิงเป็นพืชที่มีเหง้า (ลำต้นใต้ดิน) ใช้เป็นทั้งเครื่องเทศและสมุนไพร"},
+ {q:"ใบบัวบก มีชื่อเสียงเรื่องอะไร?", icon:'leafRound',
+  choices:["ช่วยให้แผลหายเร็ว","แก้ไข้หวัดใหญ่","ลดน้ำตาลในเลือด","บำรุงหัวใจ"], a:0,
+  fb:"บัวบกช่วยกระตุ้นการสร้างคอลลาเจน ทำให้แผลสมานตัวเร็วขึ้น"},
+ {q:"วุ้นว่านหางจระเข้ นิยมใช้ทาตอนไหน?", icon:'succulent',
+  choices:["แผลไฟไหม้ ผิวไหม้แดด","แผลเป็นเก่า","ผื่นแพ้อาหาร","สิวอักเสบรุนแรง"], a:0,
+  fb:"วุ้นว่านหางจระเข้มีฤทธิ์เย็น ช่วยลดการอักเสบ นิยมทาแผลไฟไหม้และผิวไหม้แดด"},
+ {q:"ใบกะเพรา นิยมนำไปทำเมนูใด?", icon:'leafRound',
+  choices:["ผัดกะเพรา","ต้มยำ","แกงเขียวหวาน","ผัดไทย"], a:0,
+  fb:"ใบกะเพรามีกลิ่นฉุนเฉพาะตัว เป็นส่วนประกอบหลักของผัดกะเพรา"},
+ {q:"ใบโหระพา นิยมใส่ในแกงชนิดใด?", icon:'leafRound',
+  choices:["แกงเขียวหวาน","ต้มยำ","แกงส้ม","แกงจืด"], a:0,
+  fb:"โหระพามีกลิ่นหอมเฉพาะตัว นิยมใส่ในแกงเขียวหวานเพื่อเพิ่มความหอม"},
+ {q:"ใบสะระแหน่ นิยมใช้แต่งจานอะไร?", icon:'leafRound',
+  choices:["ลาบ ยำ พล่า","ต้มโคล้ง","แกงส้ม","ผัดพริกแกง"], a:0,
+  fb:"สะระแหน่มีกลิ่นหอมเย็น นิยมใส่ในลาบ ยำ และพล่า"},
+ {q:"พริกไทยมีรสชาติอย่างไร?", icon:'vine',
+  choices:["หวาน","เผ็ดร้อน","เปรี้ยว","ขม"], a:1,
+  fb:"พริกไทยมีรสเผ็ดร้อน นิยมใช้ปรุงรสอาหารให้หอมและเผ็ด"},
+ {q:"กระชายมีลักษณะพิเศษอย่างไร?", icon:'rhizome',
+  choices:["มีเหง้าเป็นแง่งเล็ก ๆ","มีดอกสีแดงสด","เป็นไม้เลื้อย","มีหนามรอบลำต้น"], a:0,
+  fb:"กระชายมีเหง้าใต้ดินเป็นแง่งเล็ก ๆ คล้ายรากงอก นิยมใช้ปรุงอาหารและเป็นยา"},
+ {q:"หอมแดง นิยมใช้ปรุงอาหารเพื่ออะไร?", icon:'rhizome',
+  choices:["ลดกลิ่นคาว เพิ่มรสชาติ","เพิ่มความหวาน","ทำให้อาหารเย็น","เพิ่มความข้น"], a:0,
+  fb:"หอมแดงช่วยลดกลิ่นคาวและเพิ่มรสชาติให้อาหารไทยหลายเมนู"},
+ {q:"ใบมะกรูด นิยมใส่ในอาหารชนิดใด?", icon:'pod',
+  choices:["ต้มยำ","ผัดกะเพรา","แกงจืด","ต้มจืด"], a:0,
+  fb:"ใบมะกรูดมีกลิ่นหอมเฉพาะตัว เป็นส่วนประกอบสำคัญของต้มยำ"},
+ {q:"น้ำมะนาว มีรสชาติอย่างไร?", icon:'pod',
+  choices:["หวาน","เปรี้ยว","ขม","เค็ม"], a:1,
+  fb:"มะนาวมีรสเปรี้ยวจัด นิยมใช้ปรุงรสอาหารไทยหลายชนิด"},
+ {q:"มะขามเปียก มีรสชาติเด่นด้านใด?", icon:'pod',
+  choices:["เปรี้ยว","หวานจัด","เผ็ดร้อน","ขมมาก"], a:0,
+  fb:"มะขามเปียกมีรสเปรี้ยว นิยมใช้ทำน้ำจิ้มและปรุงรสอาหาร"},
+ {q:"ดอกอัญชัน มีสีอะไร?", icon:'flower',
+  choices:["สีน้ำเงินม่วง","สีแดงสด","สีเหลืองทอง","สีขาวล้วน"], a:0,
+  fb:"ดอกอัญชันมีสีน้ำเงินม่วงสวยงาม นิยมใช้ทำน้ำดอกอัญชันและแต่งสีอาหาร"},
+ {q:"ดอกเก๊กฮวย มีสีอะไร?", icon:'flower',
+  choices:["สีเหลือง","สีแดง","สีม่วง","สีดำ"], a:0,
+  fb:"ดอกเก๊กฮวยมีสีเหลือง นิยมนำมาชงเป็นน้ำดื่มดับร้อน"},
+ {q:"ตะไคร้หอม นิยมใช้ทำอะไร?", icon:'blade',
+  choices:["ไล่ยุง","ปรุงรสหวาน","แต่งสีอาหาร","ทำให้อาหารข้น"], a:0,
+  fb:"ตะไคร้หอมมีกลิ่นฉุนเฉพาะตัว นิยมใช้ไล่ยุงและแมลง"},
+ {q:"รางจืดในตำรายาไทยใช้เพื่ออะไร?", icon:'vine',
+  choices:["ถอนพิษ แก้เมา","บำรุงผิวพรรณ","แก้ปวดฟัน","ลดความอ้วน"], a:0,
+  fb:"รางจืดถูกใช้เป็นยาถอนพิษมาแต่โบราณ ทั้งพิษจากสัตว์และสารพิษบางชนิด"},
+ {q:"หญ้าหนวดแมว มีสรรพคุณด้านใด?", icon:'blade',
+  choices:["ขับปัสสาวะ","แก้ไอ","บำรุงสายตา","ลดไข้"], a:0,
+  fb:"หญ้าหนวดแมวมีฤทธิ์ขับปัสสาวะ ช่วยลดการตกตะกอนของนิ่ว"},
+ {q:"ลูกใต้ใบ นิยมใช้บำรุงอวัยวะใด?", icon:'leafRound',
+  choices:["ตับ","หัวใจ","ปอด","ไต"], a:0,
+  fb:"ลูกใต้ใบถูกใช้ในตำรายาไทยเพื่อบำรุงตับและบรรเทาอาการดีซ่าน"},
+ {q:"ใบพญายอ นิยมใช้ทาแก้โรคใด?", icon:'leafRound',
+  choices:["เริม งูสวัด","กลากเกลื้อน","ไข้หวัดใหญ่","ปวดข้อ"], a:0,
+  fb:"พญายอมีฤทธิ์ต้านไวรัส นิยมใช้ทาแก้โรคเริมและงูสวัด"},
+ {q:"ใบทองพันชั่ง นิยมใช้ทาแก้โรคใด?", icon:'leafRound',
+  choices:["กลากเกลื้อน","แผลไฟไหม้","ปวดฟัน","ฟกช้ำ"], a:0,
+  fb:"ทองพันชั่งมีฤทธิ์ต้านเชื้อรา นิยมใช้ทารักษากลากเกลื้อน"},
+ {q:"หญ้าดอกขาว ช่วยเรื่องใด?", icon:'flower',
+  choices:["ลดความอยากบุหรี่","บำรุงผิว","แก้ปวดหัว","ลดไข้"], a:0,
+  fb:"หญ้าดอกขาวอยู่ในบัญชียาหลักแห่งชาติ ใช้ช่วยลดความอยากบุหรี่"},
+ {q:"ผลมะแว้ง ใช้เป็นยาแก้อาการใด?", icon:'flower',
+  choices:["แก้ไอ ขับเสมหะ","แก้ท้องเสีย","แก้ปวดข้อ","แก้เวียนหัว"], a:0,
+  fb:"มะแว้งเป็นส่วนประกอบหลักในยาแก้ไอแผนโบราณ"},
+ {q:"เพชรสังฆาต ใช้รักษาโรคใดเป็นหลัก?", icon:'vine',
+  choices:["ริดสีดวงทวาร","โรคเก๊าท์","ไข้หวัด","ปวดฟัน"], a:0,
+  fb:"เพชรสังฆาตเป็นไม้เลื้อยที่ช่วยลดอาการริดสีดวงทวาร"},
+ {q:"ใบชุมเห็ดเทศ นิยมใช้ทาแก้โรคใด?", icon:'leafRound',
+  choices:["กลากเกลื้อน","ไข้หวัดใหญ่","ปวดฟัน","แผลไฟไหม้"], a:0,
+  fb:"ใบชุมเห็ดเทศมีฤทธิ์ต้านเชื้อรา นิยมทาบริเวณที่เป็นกลากเกลื้อน"},
+ {q:"ผลมะระขี้นก มีรสชาติอย่างไร?", icon:'vine',
+  choices:["ขม","หวาน","เปรี้ยว","เค็ม"], a:0,
+  fb:"มะระขี้นกมีรสขมจัด เชื่อว่าช่วยลดระดับน้ำตาลในเลือด"},
+ {q:"บอระเพ็ด มีรสชาติเด่นอย่างไร?", icon:'vine',
+  choices:["ขมมาก","หวานจัด","เปรี้ยวจี๊ด","เค็มจัด"], a:0,
+  fb:"บอระเพ็ดมีรสขมมาก ได้รับฉายาว่าเป็นยาอายุวัฒนะ"},
+ {q:"ดีปลี มีรสชาติคล้ายสมุนไพรชนิดใด?", icon:'vine',
+  choices:["พริกไทย","มะนาว","ใบเตย","มะขาม"], a:0,
+  fb:"ดีปลีมีรสเผ็ดร้อนคล้ายพริกไทย นิยมใช้เป็นเครื่องเทศและยา"},
+ {q:"ดอกกานพลูแห้ง นิยมใช้แก้อาการใด?", icon:'flower',
+  choices:["ปวดฟัน","ปวดหัว","ปวดท้อง","ปวดหลัง"], a:0,
+  fb:"ดอกกานพลูมีน้ำมันหอมระเหยที่ช่วยบรรเทาอาการปวดฟัน"},
+ {q:"อบเชย มีกลิ่นแบบใด?", icon:'blade',
+  choices:["หอมหวาน","เผ็ดจัด","เปรี้ยวฉุน","เหม็นคาว"], a:0,
+  fb:"อบเชยมีกลิ่นหอมหวานเป็นเอกลักษณ์ นิยมใส่ในขนมและเครื่องดื่ม"},
+ {q:"ใบชะพลู นิยมใช้ทำเมนูใด?", icon:'leafRound',
+  choices:["เมี่ยงคำ","ต้มยำ","แกงเขียวหวาน","ผัดกะเพรา"], a:0,
+  fb:"ใบชะพลูมีรสฝาดเล็กน้อย นิยมใช้ห่อเมี่ยงคำ"},
+ {q:"ข่า มีลักษณะคล้ายสมุนไพรชนิดใด?", icon:'rhizome',
+  choices:["ขิง","ใบเตย","มะกรูด","กะเพรา"], a:0,
+  fb:"ข่ามีเหง้าใต้ดินคล้ายขิง แต่มีกลิ่นและรสชาติเผ็ดร้อนต่างกัน"}
 ];
 
 const ROUND_SIZE = 3;
