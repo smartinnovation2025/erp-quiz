@@ -739,16 +739,9 @@
   <div class="admin-modal">
     <h3>🎡 ตั้งค่าวงล้อเสี่ยงทาย</h3>
     <p class="admin-status" id="wheelStatusText">สถานะ: <b>เปิดอยู่</b></p>
-    <div class="admin-row">
+    <div class="admin-row" style="margin-bottom:18px;">
       <button class="btn show btn--alt" id="wheelOpenBtn">เปิดวงล้อทันที</button>
       <button class="btn show admin-btn-danger" id="wheelCloseBtn">ปิดวงล้อทันที</button>
-    </div>
-    <div class="field">
-      <label for="wheelMinutesInput">ตั้งเวลาเปิดวงล้อในอีก (นาที)</label>
-      <input type="number" id="wheelMinutesInput" min="1" placeholder="เช่น 15">
-    </div>
-    <div class="admin-modal-actions" style="margin-bottom:18px;">
-      <button class="btn show btn--glow" id="wheelSetTimerBtn" style="flex:1;">ตั้งเวลา</button>
     </div>
 
     <label style="display:block; font-size:14px; font-weight:700; color:var(--teal-deep); margin-bottom:6px;">รายการของรางวัลในวงล้อ</label>
@@ -1193,23 +1186,14 @@ const DEFAULT_WHEEL_PRIZES = [
 
 function getWheelState(){
   return {
-    wheelOpen: localStorage.getItem('wheelOpen') !== 'false',
-    wheelNextOpenAt: Number(localStorage.getItem('wheelNextOpenAt')) || null
+    wheelOpen: localStorage.getItem('wheelOpen') !== 'false'
   };
 }
 function isWheelOpen(){
-  const { wheelOpen, wheelNextOpenAt } = getWheelState();
-  if(wheelOpen) return true;
-  if(wheelNextOpenAt && Date.now() >= wheelNextOpenAt) return true;
-  return false;
+  return getWheelState().wheelOpen;
 }
 function setWheelOpen(open){
   localStorage.setItem('wheelOpen', open ? 'true' : 'false');
-  if(open) localStorage.removeItem('wheelNextOpenAt');
-}
-function setWheelNextOpenAt(ms){
-  localStorage.setItem('wheelOpen', 'false');
-  localStorage.setItem('wheelNextOpenAt', String(ms));
 }
 function getWheelPrizes(){
   try{
@@ -1258,9 +1242,7 @@ function refreshGameAvailability(){
     allClosedView.style.display = 'block';
 
     const { nextRoundAt } = getRoundState();
-    const { wheelNextOpenAt } = getWheelState();
-    const candidates = [nextRoundAt, wheelNextOpenAt].filter(t => t && t > Date.now());
-    const soonest = candidates.length ? Math.min(...candidates) : null;
+    const soonest = (nextRoundAt && nextRoundAt > Date.now()) ? nextRoundAt : null;
 
     const headingEl = document.getElementById('allClosedHeading');
     const cdEl = document.getElementById('allClosedCountdown');
@@ -1307,11 +1289,8 @@ function refreshGameAvailability(){
     wheelNote.style.display = 'none';
   } else {
     wheelBtn.classList.remove('show');
-    const { wheelNextOpenAt } = getWheelState();
     wheelNote.style.display = 'block';
-    wheelNote.textContent = wheelNextOpenAt
-      ? `ปิดวงล้อเสี่ยงทายชั่วคราว จะเปิดอีกครั้งในอีก ${formatCountdown(Math.max(0, wheelNextOpenAt - Date.now()))}`
-      : 'ปิดวงล้อเสี่ยงทายชั่วคราว จะเปิดอีกครั้งเร็ว ๆ นี้';
+    wheelNote.textContent = 'ปิดวงล้อเสี่ยงทายชั่วคราว จะเปิดอีกครั้งเร็ว ๆ นี้';
   }
 }
 
@@ -1872,16 +1851,8 @@ function renderWheelPrizeList(items){
   items.forEach(addPrizeRow);
 }
 function refreshWheelPanel(){
-  const { wheelNextOpenAt } = getWheelState();
   const statusEl = document.getElementById('wheelStatusText');
-  if(isWheelOpen()){
-    statusEl.innerHTML = 'สถานะ: <b>เปิดอยู่</b>';
-  } else if(wheelNextOpenAt){
-    const mins = Math.ceil((wheelNextOpenAt - Date.now())/60000);
-    statusEl.innerHTML = `สถานะ: <b>ปิดอยู่</b> — จะเปิดในอีก ${mins} นาที`;
-  } else {
-    statusEl.innerHTML = 'สถานะ: <b>ปิดอยู่</b>';
-  }
+  statusEl.innerHTML = isWheelOpen() ? 'สถานะ: <b>เปิดอยู่</b>' : 'สถานะ: <b>ปิดอยู่</b>';
 }
 function openWheelPanel(){
   refreshWheelPanel();
@@ -1906,14 +1877,6 @@ document.getElementById('wheelOpenBtn').addEventListener('click', ()=>{
 document.getElementById('wheelCloseBtn').addEventListener('click', ()=>{
   setWheelOpen(false);
   refreshWheelPanel();
-  if(document.getElementById('startView').style.display === 'block') refreshGameAvailability();
-});
-document.getElementById('wheelSetTimerBtn').addEventListener('click', ()=>{
-  const mins = Number(document.getElementById('wheelMinutesInput').value);
-  if(!mins || mins <= 0) return;
-  setWheelNextOpenAt(Date.now() + mins*60000);
-  refreshWheelPanel();
-  document.getElementById('wheelMinutesInput').value = '';
   if(document.getElementById('startView').style.display === 'block') refreshGameAvailability();
 });
 document.getElementById('wheelAddPrizeBtn').addEventListener('click', ()=>{
