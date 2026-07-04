@@ -411,6 +411,21 @@
     border-radius:10px; padding:10px 12px; margin:8px 0 4px; text-align:center; line-height:1.5;
   }
 
+  .all-closed-view{ display:none; text-align:center; padding:10px 4px; }
+  .all-closed-view .lock-icon{
+    width:76px; height:76px; margin:0 auto 16px; border-radius:50%;
+    background:var(--panel-soft); display:flex; align-items:center; justify-content:center;
+    box-shadow:0 8px 18px -10px rgba(10,42,58,0.4); animation:iconPop .55s cubic-bezier(.3,1.4,.4,1) both;
+  }
+  .all-closed-view .lock-icon svg{ width:36px; height:36px; }
+  .all-closed-view h2{ font-family:'Noto Serif Thai',serif; font-size:clamp(21px,5vw,25px); margin:0 0 8px; color:var(--ink); }
+  .all-closed-view p{ font-size:14px; color:var(--ink-soft); margin:0 0 18px; line-height:1.6; }
+  .all-closed-view .countdown{
+    font-family:'Noto Serif Thai',serif; font-weight:700; font-size:clamp(34px,9vw,46px); color:var(--teal-deep);
+    letter-spacing:0.05em; margin-bottom:6px;
+  }
+  .all-closed-view .countdown-label{ font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-soft); }
+
   .btn{ font-family:'Noto Sans Thai',sans-serif; font-weight:700; font-size:14px; padding:12px 24px; border-radius:999px;
     border:none; cursor:pointer; color:#fff;
     background-image:linear-gradient(120deg,var(--teal),var(--blue),var(--gold),var(--teal)); background-size:300% 100%;
@@ -780,24 +795,38 @@
    <div class="card-edge"></div>
    <div class="card">
     <div class="start-view" id="startView">
-      <span class="eyebrow">ลงทะเบียนผู้เล่น</span>
-      <h2>กรอกข้อมูลของคุณก่อนเริ่มเล่น</h2>
-      <p>เลือกกิจกรรมที่ต้องการด้านล่าง</p>
-      <div class="field">
-        <label for="playerName">ชื่อ-นามสกุล</label>
-        <input type="text" id="playerName" placeholder="กรอกชื่อของคุณ" autocomplete="name">
+      <div class="all-closed-view" id="allClosedView">
+        <div class="lock-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="5" y="11" width="14" height="9" rx="2" stroke="#2f6fb0" stroke-width="1.8"/>
+            <path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#159c8c" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h2 id="allClosedHeading">กิจกรรมจะเริ่มเร็ว ๆ นี้</h2>
+        <div class="countdown" id="allClosedCountdown" style="display:none;">--:--</div>
+        <div class="countdown-label" id="allClosedCountdownLabel"></div>
       </div>
-      <div class="field">
-        <label for="playerPhone">เบอร์โทรศัพท์</label>
-        <input type="tel" id="playerPhone" placeholder="0xx-xxx-xxxx" autocomplete="tel">
+
+      <div id="registerFormArea">
+        <span class="eyebrow">ลงทะเบียนผู้เล่น</span>
+        <h2>กรอกข้อมูลของคุณก่อนเริ่มเล่น</h2>
+        <p>เลือกกิจกรรมที่ต้องการด้านล่าง</p>
+        <div class="field">
+          <label for="playerName">ชื่อ-นามสกุล</label>
+          <input type="text" id="playerName" placeholder="กรอกชื่อของคุณ" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="playerPhone">เบอร์โทรศัพท์</label>
+          <input type="tel" id="playerPhone" placeholder="0xx-xxx-xxxx" autocomplete="tel">
+        </div>
+        <div class="start-error" id="startError"></div>
+
+        <button class="btn show btn--glow" id="startBtn">🧠 เริ่มเล่นเกมทายคำถาม →</button>
+        <p class="game-closed-note" id="quizClosedNote"></p>
+
+        <button class="btn show btn--alt btn--glow" id="goWheelBtn" style="margin-top:10px;">🎡 หมุนวงล้อเสี่ยงทาย →</button>
+        <p class="game-closed-note" id="wheelClosedNote"></p>
       </div>
-      <div class="start-error" id="startError"></div>
-
-      <button class="btn show btn--glow" id="startBtn">🧠 เริ่มเล่นเกมทายคำถาม →</button>
-      <p class="game-closed-note" id="quizClosedNote"></p>
-
-      <button class="btn show btn--alt btn--glow" id="goWheelBtn" style="margin-top:10px;">🎡 หมุนวงล้อเสี่ยงทาย →</button>
-      <p class="game-closed-note" id="wheelClosedNote"></p>
     </div>
 
     <div id="quizView">
@@ -1218,9 +1247,48 @@ function formatCountdown(ms){
 }
 
 function refreshGameAvailability(){
+  const quizAvailable = isRoundOpen();
+  const wheelAvailable = isWheelOpen() && getAvailableWheelPrizes().length > 0;
+
+  const allClosedView = document.getElementById('allClosedView');
+  const registerFormArea = document.getElementById('registerFormArea');
+
+  if(!quizAvailable && !wheelAvailable){
+    registerFormArea.style.display = 'none';
+    allClosedView.style.display = 'block';
+
+    const { nextRoundAt } = getRoundState();
+    const { wheelNextOpenAt } = getWheelState();
+    const candidates = [nextRoundAt, wheelNextOpenAt].filter(t => t && t > Date.now());
+    const soonest = candidates.length ? Math.min(...candidates) : null;
+
+    const headingEl = document.getElementById('allClosedHeading');
+    const cdEl = document.getElementById('allClosedCountdown');
+    const labelEl = document.getElementById('allClosedCountdownLabel');
+    if(soonest){
+      const remainMs = Math.max(0, soonest - Date.now());
+      const minutesLeft = Math.ceil(remainMs / 60000);
+      headingEl.textContent = minutesLeft > 0
+        ? `กิจกรรมจะเริ่มอีก ${minutesLeft} นาที`
+        : 'กิจกรรมจะเริ่มอีกไม่กี่วินาที';
+      cdEl.style.display = 'block';
+      cdEl.textContent = formatCountdown(remainMs);
+      labelEl.textContent = 'นาที : วินาที';
+    } else {
+      headingEl.textContent = 'กิจกรรมจะเริ่มเร็ว ๆ นี้';
+      cdEl.style.display = 'none';
+      cdEl.textContent = '--:--';
+      labelEl.textContent = '';
+    }
+    return;
+  }
+
+  registerFormArea.style.display = '';
+  allClosedView.style.display = 'none';
+
   const startBtn = document.getElementById('startBtn');
   const quizNote = document.getElementById('quizClosedNote');
-  if(isRoundOpen()){
+  if(quizAvailable){
     startBtn.classList.add('show');
     quizNote.style.display = 'none';
   } else {
@@ -1234,7 +1302,7 @@ function refreshGameAvailability(){
 
   const wheelBtn = document.getElementById('goWheelBtn');
   const wheelNote = document.getElementById('wheelClosedNote');
-  if(isWheelOpen() && getAvailableWheelPrizes().length){
+  if(wheelAvailable){
     wheelBtn.classList.add('show');
     wheelNote.style.display = 'none';
   } else {
