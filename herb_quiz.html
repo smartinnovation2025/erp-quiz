@@ -406,6 +406,26 @@
   .admin-modal-actions .btn{ flex:1; justify-content:center; font-size:13.5px; padding:11px 14px; min-height:44px; }
   .admin-btn-ghost{ background-image:none !important; background:var(--panel-soft) !important; color:var(--ink-soft) !important; box-shadow:none !important; }
 
+  .admin-modal--tabbed{ max-width:600px; padding:30px 32px; }
+  .admin-tabs{ display:flex; gap:8px; margin-bottom:20px; background:var(--panel-soft); padding:5px; border-radius:14px; }
+  .admin-tab{ flex:1; border:none; background:none; padding:11px 6px; border-radius:10px; font-family:inherit; font-size:13.5px; font-weight:700; color:var(--ink-soft); cursor:pointer; transition:background .15s ease,color .15s ease; white-space:nowrap; }
+  .admin-tab.active{ background:var(--panel); color:var(--teal-deep); box-shadow:0 4px 10px -4px rgba(0,0,0,0.3); }
+  .admin-tab-panel{ display:none; }
+  .admin-tab-panel.active{ display:block; }
+
+  .dash-summary{ display:flex; gap:14px; margin-bottom:20px; }
+  .dash-stat{ flex:1; background:var(--panel-soft); border-radius:14px; padding:16px 10px; text-align:center; }
+  .dash-stat .num{ font-size:28px; font-weight:800; color:var(--teal-deep); display:block; line-height:1.25; }
+  .dash-stat .lbl{ font-size:12.5px; color:var(--ink-soft); }
+  .dash-table{ display:flex; flex-direction:column; gap:8px; max-height:360px; overflow-y:auto; margin-bottom:16px; padding-right:4px; }
+  .dash-row{ display:flex; align-items:center; gap:14px; padding:11px 16px; border-radius:12px; background:var(--panel-soft); font-size:14px; }
+  .dash-row.is-zero{ opacity:0.5; }
+  .dash-row .d-date{ color:var(--ink); font-weight:600; flex:0 0 auto; width:104px; }
+  .dash-row .d-bar{ flex:1; height:8px; border-radius:999px; background:var(--panel-line); position:relative; overflow:hidden; }
+  .dash-row .d-bar i{ position:absolute; inset:0 auto 0 0; width:0%; background:linear-gradient(90deg,var(--teal-deep),var(--gold)); border-radius:999px; }
+  .dash-row .d-count{ color:var(--teal-deep); font-weight:800; flex:0 0 auto; width:36px; text-align:right; }
+  .dash-empty, .dash-error{ font-size:13.5px; color:var(--ink-soft); text-align:center; padding:24px 0; }
+
   .game-closed-note{
     display:none; font-size:13px; color:var(--ink-soft); background:var(--panel-soft);
     border-radius:10px; padding:10px 12px; margin:8px 0 4px; text-align:center; line-height:1.5;
@@ -714,48 +734,63 @@
 </div>
 
 <div class="admin-overlay" id="adminPanelOverlay">
-  <div class="admin-modal">
-    <h3>ตั้งค่ารอบเล่น</h3>
-    <p class="admin-status" id="adminStatusText">สถานะ: <b>เปิดอยู่</b></p>
-    <div class="admin-row">
-      <button class="btn show btn--alt" id="adminOpenBtn">เปิดรอบทันที</button>
-      <button class="btn show admin-btn-danger" id="adminCloseBtn">ปิดรอบทันที</button>
-    </div>
-    <div class="field">
-      <label for="adminMinutesInput">ตั้งเวลาเปิดรอบถัดไปในอีก (นาที)</label>
-      <input type="number" id="adminMinutesInput" min="1" placeholder="เช่น 15">
-    </div>
-    <div class="admin-modal-actions" style="margin-bottom:10px;">
-      <button class="btn admin-btn-ghost show" id="adminPanelClose">ปิดหน้าต่าง</button>
-      <button class="btn show btn--glow" id="adminSetTimerBtn">ตั้งเวลา</button>
-    </div>
-    <div class="admin-modal-actions">
-      <button class="btn admin-btn-ghost show" id="openWheelSettingsBtn" style="flex:1;">🎡 ตั้งค่าวงล้อเสี่ยงทาย</button>
-    </div>
-  </div>
-</div>
-
-<div class="admin-overlay" id="adminWheelPanelOverlay">
-  <div class="admin-modal">
-    <h3>🎡 ตั้งค่าวงล้อเสี่ยงทาย</h3>
-    <p class="admin-status" id="wheelStatusText">สถานะ: <b>เปิดอยู่</b></p>
-    <div class="admin-row" style="margin-bottom:18px;">
-      <button class="btn show btn--alt" id="wheelOpenBtn">เปิดวงล้อทันที</button>
-      <button class="btn show admin-btn-danger" id="wheelCloseBtn">ปิดวงล้อทันที</button>
+  <div class="admin-modal admin-modal--tabbed">
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="round" id="adminTabBtnRound">ตั้งค่ารอบเล่น</button>
+      <button class="admin-tab" data-tab="wheel" id="adminTabBtnWheel">🎡 วงล้อ</button>
+      <button class="admin-tab" data-tab="dashboard" id="adminTabBtnDashboard">📊 แดชบอร์ด</button>
     </div>
 
-    <label style="display:block; font-size:14px; font-weight:700; color:var(--teal-deep); margin-bottom:6px;">รายการของรางวัลในวงล้อ</label>
-    <p class="wheel-hint">น้ำหนัก = ตัวเลขยิ่งมาก ยิ่งมีโอกาสออกมากขึ้น &nbsp;·&nbsp; จำนวนคงเหลือ = เว้นว่างไว้ถ้าไม่จำกัด เมื่อแจกครบจะตัดออกจากวงล้ออัตโนมัติ</p>
-    <div class="wheel-prize-row-labels">
-      <span>ชื่อรางวัล</span><span>น้ำหนัก</span><span>คงเหลือ</span><span></span>
+    <div class="admin-tab-panel active" id="adminTabRound">
+      <p class="admin-status" id="adminStatusText">สถานะ: <b>เปิดอยู่</b></p>
+      <div class="admin-row">
+        <button class="btn show btn--alt" id="adminOpenBtn">เปิดรอบทันที</button>
+        <button class="btn show admin-btn-danger" id="adminCloseBtn">ปิดรอบทันที</button>
+      </div>
+      <div class="field">
+        <label for="adminMinutesInput">ตั้งเวลาเปิดรอบถัดไปในอีก (นาที)</label>
+        <input type="number" id="adminMinutesInput" min="1" placeholder="เช่น 15">
+      </div>
+      <div class="admin-modal-actions">
+        <button class="btn show btn--glow" id="adminSetTimerBtn" style="flex:1;">ตั้งเวลา</button>
+      </div>
     </div>
-    <div class="wheel-prize-list" id="wheelPrizeList"></div>
-    <button class="btn admin-btn-ghost show" id="wheelAddPrizeBtn" style="margin-bottom:8px;">+ เพิ่มรายการ</button>
-    <p class="wheel-save-msg" id="wheelSaveMsg"></p>
 
-    <div class="admin-modal-actions">
-      <button class="btn admin-btn-ghost show" id="wheelPanelClose">ปิดหน้าต่าง</button>
-      <button class="btn show btn--glow" id="wheelSavePrizesBtn">บันทึกรายการ</button>
+    <div class="admin-tab-panel" id="adminTabWheel">
+      <p class="admin-status" id="wheelStatusText">สถานะ: <b>เปิดอยู่</b></p>
+      <div class="admin-row" style="margin-bottom:18px;">
+        <button class="btn show btn--alt" id="wheelOpenBtn">เปิดวงล้อทันที</button>
+        <button class="btn show admin-btn-danger" id="wheelCloseBtn">ปิดวงล้อทันที</button>
+      </div>
+
+      <label style="display:block; font-size:14px; font-weight:700; color:var(--teal-deep); margin-bottom:6px;">รายการของรางวัลในวงล้อ</label>
+      <p class="wheel-hint">น้ำหนัก = ตัวเลขยิ่งมาก ยิ่งมีโอกาสออกมากขึ้น &nbsp;·&nbsp; จำนวนคงเหลือ = เว้นว่างไว้ถ้าไม่จำกัด เมื่อแจกครบจะตัดออกจากวงล้ออัตโนมัติ</p>
+      <div class="wheel-prize-row-labels">
+        <span>ชื่อรางวัล</span><span>น้ำหนัก</span><span>คงเหลือ</span><span></span>
+      </div>
+      <div class="wheel-prize-list" id="wheelPrizeList"></div>
+      <button class="btn admin-btn-ghost show" id="wheelAddPrizeBtn" style="margin-bottom:8px;">+ เพิ่มรายการ</button>
+      <p class="wheel-save-msg" id="wheelSaveMsg"></p>
+
+      <div class="admin-modal-actions">
+        <button class="btn show btn--glow" id="wheelSavePrizesBtn" style="flex:1;">บันทึกรายการ</button>
+      </div>
+    </div>
+
+    <div class="admin-tab-panel" id="adminTabDashboard">
+      <div class="dash-summary">
+        <div class="dash-stat"><span class="num" id="dashStatTotal">–</span><span class="lbl">ลงทะเบียนทั้งหมด</span></div>
+        <div class="dash-stat"><span class="num" id="dashStatToday">–</span><span class="lbl">วันนี้</span></div>
+        <div class="dash-stat"><span class="num" id="dashStatDays">–</span><span class="lbl">จำนวนวันที่มีคนเล่น</span></div>
+      </div>
+      <div class="dash-table" id="dashTable"><p class="dash-empty">กำลังโหลดข้อมูล...</p></div>
+      <div class="admin-modal-actions">
+        <button class="btn admin-btn-ghost show" id="dashRefreshBtn" style="flex:1;">🔄 รีเฟรชข้อมูล</button>
+      </div>
+    </div>
+
+    <div class="admin-modal-actions" style="margin-top:14px;">
+      <button class="btn admin-btn-ghost show" id="adminPanelClose" style="flex:1;">ปิดหน้าต่าง</button>
     </div>
   </div>
 </div>
@@ -1765,8 +1800,24 @@ function refreshAdminPanel(){
     statusEl.innerHTML = 'สถานะ: <b>ปิดอยู่</b>';
   }
 }
+function setAdminTab(tab){
+  document.querySelectorAll('.admin-tab').forEach(b=>b.classList.toggle('active', b.dataset.tab === tab));
+  document.getElementById('adminTabRound').classList.toggle('active', tab === 'round');
+  document.getElementById('adminTabWheel').classList.toggle('active', tab === 'wheel');
+  document.getElementById('adminTabDashboard').classList.toggle('active', tab === 'dashboard');
+  if(tab === 'wheel'){
+    refreshWheelPanel();
+    renderWheelPrizeList(getWheelPrizes());
+    document.getElementById('wheelSaveMsg').textContent = '';
+  }
+  if(tab === 'dashboard') loadDashboard();
+}
+document.querySelectorAll('.admin-tab').forEach(btn=>{
+  btn.addEventListener('click', ()=> setAdminTab(btn.dataset.tab));
+});
 function openAdminPanel(){
   refreshAdminPanel();
+  setAdminTab('round');
   document.getElementById('adminPanelOverlay').classList.add('show');
 }
 function closeAdminPanel(){
@@ -1854,21 +1905,7 @@ function refreshWheelPanel(){
   const statusEl = document.getElementById('wheelStatusText');
   statusEl.innerHTML = isWheelOpen() ? 'สถานะ: <b>เปิดอยู่</b>' : 'สถานะ: <b>ปิดอยู่</b>';
 }
-function openWheelPanel(){
-  refreshWheelPanel();
-  renderWheelPrizeList(getWheelPrizes());
-  document.getElementById('wheelSaveMsg').textContent = '';
-  document.getElementById('adminWheelPanelOverlay').classList.add('show');
-}
-function closeWheelPanel(){
-  document.getElementById('adminWheelPanelOverlay').classList.remove('show');
-}
 
-document.getElementById('openWheelSettingsBtn').addEventListener('click', ()=>{
-  closeAdminPanel();
-  openWheelPanel();
-});
-document.getElementById('wheelPanelClose').addEventListener('click', closeWheelPanel);
 document.getElementById('wheelOpenBtn').addEventListener('click', ()=>{
   setWheelOpen(true);
   refreshWheelPanel();
@@ -1905,6 +1942,81 @@ document.getElementById('wheelSavePrizesBtn').addEventListener('click', ()=>{
   msgEl.textContent = 'บันทึกรายการเรียบร้อยแล้ว';
   if(document.getElementById('startView').style.display === 'block') refreshGameAvailability();
 });
+
+/* ---------- admin dashboard: registrations by day ---------- */
+function localDateKey(d){
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function formatDashDate(key){
+  const [y,m,day] = key.split('-').map(Number);
+  return new Date(y, m-1, day).toLocaleDateString('th-TH', { day:'numeric', month:'short', year:'2-digit' });
+}
+function dashDateRange(startKey, endKey){
+  const [sy,sm,sd] = startKey.split('-').map(Number);
+  const [ey,em,ed] = endKey.split('-').map(Number);
+  const cursor = new Date(sy, sm-1, sd);
+  const end = new Date(ey, em-1, ed);
+  const out = [];
+  while(cursor <= end){
+    out.push(localDateKey(cursor));
+    cursor.setDate(cursor.getDate() + 1);
+  }
+  return out;
+}
+async function loadDashboard(){
+  const tableEl = document.getElementById('dashTable');
+  tableEl.innerHTML = '<p class="dash-empty">กำลังโหลดข้อมูล...</p>';
+  document.getElementById('dashStatTotal').textContent = '–';
+  document.getElementById('dashStatToday').textContent = '–';
+  document.getElementById('dashStatDays').textContent = '–';
+
+  const { data, error } = await sb.from('quiz_results').select('started_at');
+  if(error){
+    console.error('Supabase dashboard fetch error:', error);
+    tableEl.innerHTML = '<p class="dash-error">โหลดข้อมูลไม่สำเร็จ ลองรีเฟรชอีกครั้ง</p>';
+    return;
+  }
+
+  const counts = {};
+  (data || []).forEach(row=>{
+    if(!row.started_at) return;
+    const key = localDateKey(new Date(row.started_at));
+    counts[key] = (counts[key] || 0) + 1;
+  });
+
+  const activeKeys = Object.keys(counts);
+  const total = data ? data.length : 0;
+  const todayKey = localDateKey(new Date());
+
+  document.getElementById('dashStatTotal').textContent = total;
+  document.getElementById('dashStatToday').textContent = counts[todayKey] || 0;
+  document.getElementById('dashStatDays').textContent = activeKeys.length;
+
+  if(!activeKeys.length){
+    tableEl.innerHTML = '<p class="dash-empty">ยังไม่มีข้อมูลการลงทะเบียน</p>';
+    return;
+  }
+
+  const sortedKeys = activeKeys.slice().sort();
+  const minKey = sortedKeys[0];
+  const maxKey = sortedKeys[sortedKeys.length - 1] > todayKey ? sortedKeys[sortedKeys.length - 1] : todayKey;
+  const allDays = dashDateRange(minKey, maxKey).reverse();
+  const maxCount = Math.max(...activeKeys.map(k=>counts[k]));
+
+  tableEl.innerHTML = '';
+  allDays.forEach(key=>{
+    const count = counts[key] || 0;
+    const row = document.createElement('div');
+    row.className = 'dash-row' + (count === 0 ? ' is-zero' : '');
+    row.innerHTML = `
+      <span class="d-date">${formatDashDate(key)}</span>
+      <span class="d-bar"><i style="width:${maxCount ? Math.round(count/maxCount*100) : 0}%"></i></span>
+      <span class="d-count">${count}</span>
+    `;
+    tableEl.appendChild(row);
+  });
+}
+document.getElementById('dashRefreshBtn').addEventListener('click', loadDashboard);
 
 showStartView();
 </script>
